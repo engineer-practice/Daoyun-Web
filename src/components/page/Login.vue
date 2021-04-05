@@ -8,12 +8,12 @@
             <el-tab-pane id="yzma" label="验证码登录" name="2"></el-tab-pane>
           </el-tabs>
         </div> -->
-        <div>
-          <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="密码登录" name="1"></el-tab-pane>
-            <el-tab-pane label="验证码登录" name="2"></el-tab-pane>
-          </el-tabs>
-        </div>
+      <div>
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tab-pane label="密码登录" name="1"></el-tab-pane>
+          <el-tab-pane label="验证码登录" name="2"></el-tab-pane>
+        </el-tabs>
+      </div>
       <el-form
         v-show="activeName == '1'"
         autocomplete="on"
@@ -199,9 +199,9 @@ export default {
         if (errMsg) {
         } else {
           /////////////////////////////////////////////////////
-          // var data = {
-          //   email: this.loginForm1.username
-          // };
+          var data = { 
+            email: this.loginForm1.username,
+          };
           // this.$http.post("/api/sendCode", data).then(
           //   res => {
           //     if (res.data.respCode == "请输入真实邮箱") {
@@ -218,10 +218,11 @@ export default {
           //     });
           //   }
           // );
-          // // this.$axios.post("/api/sendCode", data, this.config).then(res => {
-          // //   // this.validateCode = res.data;
-          // //   localStorage.setItem("validateCode", res.data);
-          // // });
+          // this.$axios.post("/api/sendCode", data, this.config).then(res => {
+          //   // this.validateCode = res.data;
+          //   localStorage.setItem("validateCode", res.data);
+          // });
+          console.log("this.config = "+this.config)
           /////////////////////////////////////////////////////////////////////////
           this.isdisplay = true; //显示验证码
           for (let i = 0; i < 4; i++) {
@@ -338,84 +339,89 @@ export default {
         //验证码登录
         //  console.log("111111111111111111    ")
         // this.$refs.loginForm1.validate((valid) => {
-          // if (valid) {
-            // console.log("this.loginForm1 = " + JSON.stringify(this.loginForm1));
-            // console.log("localStorage.getItem(validateCode) = " +localStorage.getItem("validateCode"));
-            console.log("localStorage.getItem(validateCode) = "+typeof localStorage.getItem("validateCode") )
-            console.log( "this.loginForm1.message = "+typeof (this.loginForm1.message))
-            if (
-              localStorage.getItem("validateCode") != this.loginForm1.message ||
-              this.loginForm1.username != localStorage.getItem("account")
-            ) {
-              this.$alert("验证码错误，请重新输入", "登录失败", {
-                confirmButtonText: "确定",
-              });
-            } else {
-              this.loading = true;
-              var data = {
-                email: this.loginForm1.username,
-              };
-              /////////////////////////////////////////////////////////////////////////
+        // if (valid) {
+        // console.log("this.loginForm1 = " + JSON.stringify(this.loginForm1));
+        // console.log("localStorage.getItem(validateCode) = " +localStorage.getItem("validateCode"));
+        console.log(
+          "localStorage.getItem(validateCode) = " +
+            typeof localStorage.getItem("validateCode")
+        );
+        console.log(
+          "this.loginForm1.message = " + typeof this.loginForm1.message
+        );
+        if (
+          localStorage.getItem("validateCode") != this.loginForm1.message ||
+          this.loginForm1.username != localStorage.getItem("account")
+        ) {
+          this.$alert("验证码错误，请重新输入", "登录失败", {
+            confirmButtonText: "确定",
+          });
+        } else {
+          this.loading = true;
+          var data = {
+            email: this.loginForm1.username,
+          };
+          /////////////////////////////////////////////////////////////////////////
 
-              console.log("login success");
-              this.$router.push("/manageboard");
-              /////////////////////////////////////////////////////////////////////////
-              }
-////////////////////////////////////////////////////////////////////////////////////////////////
-              // this.$http.post("/api/loginByCode", data).then(
-              //   (res) => {
-              //     this.loading = false;
-              //     if (res.data.respCode == "1") {
-              //       //登录成功
-              //       if (res.data.role != "3") {
-              //         localStorage.setItem("roleId", res.data.role);
-              //         if (res.data.role == "0") {
-              //           //登录角色
-              //           localStorage.setItem("roles", "teacher");
-              //         } else if (res.data.role == "1") {
-              //           localStorage.setItem("roles", "admin");
-              //         } else if (res.data.role == "2") {
-              //           localStorage.setItem("roles", "superAdmin");
-              //         }
-              //         var date = new Date();
-              //         localStorage.setItem("loginTime", date.getTime()); //登录时间
-              //         this.loading = false;
-              //         localStorage.setItem("Authorization", res.data.token);
-              //         localStorage.setItem("account", res.data.email);
-              //         localStorage.setItem("isLogin", true);
-              //         this.$http.get("/api/menus").then((res) => {
-              //           localStorage.setItem(
-              //             "menuList",
-              //             JSON.stringify(res.data)
-              //           );
-              //           this.$router.push("/home");
-              //         });
-              //       } else {
-              //         //学生
-              //         this.$alert(
-              //           "该账号为学生账号，没有权限登录后台管理系统，如有疑问请联系管理员！",
-              //           "提示",
-              //           {
-              //             confirmButtonText: "确定",
-              //           }
-              //         );
-              //       }
-              //     } else {
-              //       this.loading = false;
-              //       this.$alert(res.data.respCode, "登录失败", {
-              //         confirmButtonText: "确定",
-              //       });
-              //     }
-              //   },
-              //   (res) => {
-              //     this.$router.push({
-              //       path: "/" + res,
-              //     });
-              //   }
-              // );
-  /////////////////////////////////////////////////////////////////////////////////
-            
-          // }
+          console.log("login success");
+          this.$router.push("/manageboard");
+          /////////////////////////////////////////////////////////////////////////
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        // this.$http.post("/api/loginByCode", data).then(
+        //   (res) => {
+        //     this.loading = false;
+        //     if (res.data.respCode == "1") {
+        //       //登录成功
+        //       if (res.data.role != "3") {
+        //         localStorage.setItem("roleId", res.data.role);
+        //         if (res.data.role == "0") {
+        //           //登录角色
+        //           localStorage.setItem("roles", "teacher");
+        //         } else if (res.data.role == "1") {
+        //           localStorage.setItem("roles", "admin");
+        //         } else if (res.data.role == "2") {
+        //           localStorage.setItem("roles", "superAdmin");
+        //         }
+        //         var date = new Date();
+        //         localStorage.setItem("loginTime", date.getTime()); //登录时间
+        //         this.loading = false;
+        //         localStorage.setItem("Authorization", res.data.token);
+        //         localStorage.setItem("account", res.data.email);
+        //         localStorage.setItem("isLogin", true);
+        //         this.$http.get("/api/menus").then((res) => {
+        //           localStorage.setItem(
+        //             "menuList",
+        //             JSON.stringify(res.data)
+        //           );
+        //           this.$router.push("/home");
+        //         });
+        //       } else {
+        //         //学生
+        //         this.$alert(
+        //           "该账号为学生账号，没有权限登录后台管理系统，如有疑问请联系管理员！",
+        //           "提示",
+        //           {
+        //             confirmButtonText: "确定",
+        //           }
+        //         );
+        //       }
+        //     } else {
+        //       this.loading = false;
+        //       this.$alert(res.data.respCode, "登录失败", {
+        //         confirmButtonText: "确定",
+        //       });
+        //     }
+        //   },
+        //   (res) => {
+        //     this.$router.push({
+        //       path: "/" + res,
+        //     });
+        //   }
+        // );
+        /////////////////////////////////////////////////////////////////////////////////
+
+        // }
         // });
       }
     },
@@ -430,8 +436,6 @@ export default {
 </script> 
 
 <style scoped>
-
-
 /* .login-wrap {
   position: relative;
   width: 100%;
@@ -441,14 +445,13 @@ export default {
 } */
 .login-wrap {
   position: relative;
-      left: 0;
-      right: 0;
-      width: 100%;
-      height: 100%;
-      
-    
-      background-image: url(../../assets/img/login-bg.jpg);
-      background-size: 100%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  background-image: url(../../assets/img/login-bg.jpg);
+  background-size: 100%;
 }
 .ms-title {
   width: 100%;
@@ -457,7 +460,7 @@ export default {
   font-size: 20px;
   color: rgb(33, 118, 214);
   border-bottom: 1px solid #ddd;
-   /* margin: 10px auto; */
+  /* margin: 10px auto; */
 }
 .ms-login {
   position: absolute;
@@ -490,24 +493,24 @@ export default {
   right: 30px;
 }
 .login-select {
-   position: absolute;
-    left: 0;
-    right: 10;
-    width: 240px;
-    padding: 0px 10px 0px 35px;
-    margin: -12px auto;
-    
-    /* background-color: #6363f793; */
+  position: absolute;
+  left: 0;
+  right: 10;
+  width: 240px;
+  padding: 0px 10px 0px 35px;
+  margin: -12px auto;
+
+  /* background-color: #6363f793; */
 }
 .login-form {
-    position: absolute;
-    left: 0;
-    right: 0;
-    width: 400px;
-    padding: 35px 35px 15px 35px;
-    margin: 120px auto;
-    /* background-color: #f8f8f9; */
-     background: rgba(255, 255, 255, 0.3);
-    overflow: hidden;
-  }
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 400px;
+  padding: 35px 35px 15px 35px;
+  margin: 120px auto;
+  /* background-color: #f8f8f9; */
+  background: rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+}
 </style>

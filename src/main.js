@@ -7,6 +7,10 @@ import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
 // import './assets/css/theme-green/index.css'; // 浅绿色主题
 import './assets/css/icon.css';
 import axios from 'axios'
+import '../axios'
+// import '../config/axios'
+
+Vue.prototype.$ajax = axios
 
 Vue.config.productionTip = false
 
@@ -18,6 +22,17 @@ new Vue({
 
 Vue.use(ElementUI, {
   size: 'small'
+});
+
+this.$axios({
+  method: "post",
+  url: "/login",
+  data: {
+    userName: "xxx",
+    password: "xxx",
+  },
+}).then((res) => {
+  console.log(res);
 });
 
 // 添加请求拦截器，在请求头中加token

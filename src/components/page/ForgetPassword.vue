@@ -2,8 +2,8 @@
 <div class="forget-wrap">
         <div class="ms-forget">
             <div class="ms-title">设置您的密码</div>
-    <el-form :model="Check" ref="forgetform" class="forgetform">
-    
+    <!-- <el-form :model="Check" ref="forgetform" class="forgetform"> -->
+    <el-form  ref="forgetform" class="forgetform">
         
         <el-form-item label="旧密码" prop="oldPsd">
             <el-input type="password" v-model="ruleForm.oldPsd" placeholder="请输入旧密码"></el-input>
