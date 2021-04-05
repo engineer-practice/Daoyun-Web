@@ -24,17 +24,6 @@ Vue.use(ElementUI, {
   size: 'small'
 });
 
-this.$axios({
-  method: "post",
-  url: "/login",
-  data: {
-    userName: "xxx",
-    password: "xxx",
-  },
-}).then((res) => {
-  console.log(res);
-});
-
 // 添加请求拦截器，在请求头中加token
 axios.interceptors.request.use(
   config => {

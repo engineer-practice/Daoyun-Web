@@ -124,6 +124,7 @@
 
 <script>
 import qs from "qs";
+import { get } from '../../../axios'
 export default {
   // inject: ["reload"], // 使用 inject 注入 reload 变量
   data() {
@@ -202,6 +203,7 @@ export default {
           var data = { 
             email: this.loginForm1.username,
           };
+          
           // this.$http.post("/api/sendCode", data).then(
           //   res => {
           //     if (res.data.respCode == "请输入真实邮箱") {
@@ -279,6 +281,11 @@ export default {
               alert("账号密码不正确");
               location.reload();
             }
+            console.log("准备调用")
+            get('服务器地址',{}).then(res =>console.log(调用成功))
+             console.log("准备结束")
+
+            
             //////////////////////////////////////////////////////////////////
             // this.$http.post("/api/loginByPassword", data).then(
             //   res => {

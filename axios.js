@@ -1,9 +1,14 @@
 import axios from 'axios'
 
 // 配置默认的host,假如你的API host是：http://api.htmlx.club
-// axios.defaults.baseURL = 'http://api.htmlx.club'    
-axios.defaults.baseURL = 'http://localhost:8081/login'
+axios.defaults.baseURL = 'http://api.htmlx.club'    
 
+export function get(url,params){
+    return axios.get(url,{
+        params:{},
+        headers:{}
+    })
+}
 
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
