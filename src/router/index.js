@@ -1,235 +1,253 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Router from 'vue-router'
 
-Vue.use(VueRouter)
+Vue.use(Router)
 
-const routes = [{
-        /*
-          path: '/',
-          name: 'Home',
-          component: Home
-          */
-        path: '/',
-        redirect: '/manageboard'
-            //component: () => import( /* webpackChunkName: "manageboard" */ '../components/page/ManageBoard.vue')
-    },
-    {
-        path: '/about',
-        name: 'About',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/About.vue')
-    },
-    {
-        path: '/login',
-        component: () =>
-            import ( /* webpackChunkName: "login" */ '../components/page/Login.vue'),
-        meta: {
-            title: '登录'
+/* Layout */
+import Layout from '../views/layout/Layout'
+// export const constantRouterMap = [
+const router = new Router({
+    base: '/',
+    mode: 'history', //去除#
+    // mode: 'hash',
+    routes: [
+        { path: '/', redirect: '/login', hidden: true },
+        {
+            path: '/login',
+            // redirect: '/login',
+            component: () =>
+                import ('@/views/login/index'),
+            hidden: true,
         },
-    },
-    {
-        path: '/signup',
-        component: () =>
-            import ( /* webpackChunkName: "login" */ '../components/page/signup.vue'),
-        meta: {
-            title: '注册'
+        {
+            path: '/signup',
+            component: () =>
+                import ('@/views/login/signup'),
+            hidden: true,
         },
-    },
-    {
-        path: '/checkphone',
-        component: () =>
-            import ( /* webpackChunkName: "checkphone" */ '../components/page/CheckPhone.vue'),
-        meta: {
-            title: '身份验证'
-        }
-    },
-    {
-        path: '/forgetpassword',
-        component: () =>
-            import ( /* webpackChunkName: "forgetpassword" */ '../components/page/ForgetPassword.vue'),
-        meta: {
-            title: '忘记密码'
-        }
-    },
-    {
-        path: '/helloworld',
-        component: () =>
-            import ( /* webpackChunkName: "helloworld" */ '../components/HelloWorld.vue'),
-        meta: {
-            title: 'helloworld'
-        }
-    },
-    {
-        path: '/home',
-        component: () =>
-            import ( /* webpackChunkName: "home" */ '../components/common/Home.vue'),
-        children: [{
-                path: '/manageboard',
+        {
+            path: '/forgetPassword',
+            component: () =>
+                import ('@/views/login/forgetPassword'),
+            hidden: true,
+        },
+        {
+            path: '/404',
+            component: () =>
+                import ('@/views/errorPage/404'),
+            hidden: true
+        },
+        {
+            path: '/403',
+            component: () =>
+                import ('@/views/errorPage/403'),
+            hidden: true
+        },
+        {
+            path: '/500',
+            component: () =>
+                import ('@/views/errorPage/500'),
+            hidden: true
+        },
+        {
+            path: '/error',
+            component: () =>
+                import ('@/views/errorPage/error'),
+            hidden: true
+        },
+        {
+            path: '/',
+            component: Layout,
+            redirect: '/home',
+            name: 'Home',
+            roles: "common",
+            children: [{
+                path: 'home',
                 component: () =>
-                    import ( /* webpackChunkName: "manageboard" */ '../components/page/ManageBoard.vue'),
-                meta: {
-                    title: '系统首页'
-                }
-            },
-            {
-                path: '/Introduction',
-                component: () =>
-                    import ( /* webpackChunkName: "Introduction" */ '../components/page/Introduction.vue'),
-                meta: {
-                    title: '登录者详情'
-                },
-            },
-            {
-                path: '/table',
-                component: () =>
-                    // import ( /*webpackChunkName: "table" */ '../components/page/BaseTable.vue'),
-                    import ( /*webpackChunkName: "403" */ '../components/page/403.vue'),
-                meta: {
-                    title: '基础表格'
-                }
-            },
-            {
-                path: '/role',
-                component: () =>
-                    import ( /*webpackChunkName: "role" */ '../components/page/RoleManage.vue'),
-                    // import ( /*webpackChunkName: "404" */ '../components/page/404.vue'),
-                meta: {
-                    title: '角色管理'
-                }
-            },
-            {
-                path: '/form',
-                component: () =>
-                    import ( /*webpackChunkName: "form" */ '../components/page/BaseForm.vue'),
-                meta: {
-                    title: '表单编辑'
-                }
-            },
-            {
-                path: '/dictionary',
-                component: () =>
-                    // import ( /*webpackChunkName: "test1" */ '../components/page/DicManage'),
-                    import ( /*webpackChunkName: "404" */ '../components/page/404.vue'),
-                meta: {
-                    title: '字典'
-                }
-            },
-            {
-                path: '/test2',
-                component: () =>
-                    // import ( /*webpackChunkName: "test2" */ '../components/page/Cousemanage.vue'),
-                    import ( /*webpackChunkName: "404" */ '../components/page/404.vue'),
-                meta: {
-                    title: '课程管理'
-                }
-            },
-            {
-                path: '/test',
-                component: () =>
-                    // import ( /*webpackChunkName: "test" */ '../components/page/test.vue'),
-                    import ( /*webpackChunkName: "404" */ '../components/page/404.vue'),
-                meta: {
-                    title: '测试页面'
-                }
-            },
-            {
-                path: '/HelloWorld',
-                component: () =>
-                    // import ( /*webpackChunkName: "test" */ '../components/page/test.vue'),
-                    import ( /*webpackChunkName: "test" */ '../components/HelloWorld.vue'),
-                meta: {
-                    title: 'HelloWorld'
-                }
-            },
-            {
-                path: '/testdetail',
-                name: 'testdetailpage',
-                component: () =>
-                    import ( /*webpackChunkName: "testdetail" */ '../components/page/testDetail.vue'),
-                meta: {
-                    title: '测试详情页面'
-                }
-            },
-            {
-                path: '/dicdetail',
-                name: 'dicdetailpage',
-                component: () =>
-                    import ( /*webpackChunkName: "testdetail" */ '../components/page/dicDetail.vue'),
-                meta: {
-                    title: '字典详情页面'
-                }
-            },
-            {
-                path: '/403',
-                component: () =>
-                    import ( /*webpackChunkName: "403" */ '../components/page/403.vue'),
-                meta: {
-                    title: '403'
-                }
-            },
-            {
-                path: '/404',
-                component: () =>
-                    import ( /*webpackChunkName: "404" */ '../components/page/404.vue'),
-                meta: {
-                    title: '404'
-                }
-            },
-            // {
-            //     path: '/tabs',
-            //     component: () =>
-            //         import ( /*webpackChunkName: "404" */ '../components/page/404.vue'),
-            //     meta: {
-            //         title: 'tabs'
-            //     }
-            // },
-            {
-                path: '/500',
-                component: () =>
-                    import ( /*webpackChunkName: "404" */ '../components/page/500.vue'),
-                meta: {
-                    title: '500'
-                }
-            },
-            {
-                path: '/customerror',
-                component: () =>
-                    import ( /*webpackChunkName: "404" */ '../components/page/CustomError.vue'),
-                meta: {
-                    title: '自定义异常页面'
-                }
-            }
-        ]
-    }
-]
+                    import ('@/views/home/index'),
+                name: 'home',
+                meta: { title: '首页', icon: 'el-icon-s-home', noCache: true }
+            }]
+        },
+        {
+            path: '/',
+            component: Layout,
+            redirect: '/information',
+            name: 'information',
+            isShow: false,
 
+            children: [{
+                path: 'information',
+                component: () =>
+                    import ('@/views/information/index'),
+                name: 'information',
+                meta: { title: '个人信息', icon: 'dashboard', noCache: false },
 
+            }]
+        },
+    ]
 
-const router = new VueRouter({
-    mode: 'history',
-    base: process.env.BASE_URL,
-    routes
 })
 
 
-
+// 未登陆过滤路由
+const whiteList = ['/login']; //不需要登录能访问的path
+var qq = false; // 页面刷新货初次加载 才会执行这个变量
 router.beforeEach((to, from, next) => {
-    if (to.path === '/login') {
-      next();
-    } else {
-      let token = localStorage.getItem('token');
-   
-      if (token === 'null' || token === '') {
-        next('/login');
-      } else {
-        next();
-      }
+    // console.log('beforeEach');
+    if (!qq) {
+        qq = true; // 先让他变 true 不然跳转页面时会死循环
+        // 拿到数据后 就是把数据push到父组件里
+        //  util.extendRouters 自己写的方法
+        console.log("aa")
+        routerGo();
+
+        next(to.path);
     }
-  });
+    var isLogin = JSON.parse(localStorage.getItem('isLogin')); //获取缓存看是否登录过
+    var time = localStorage.getItem('loginTime');
+    var nowTime = new Date().getTime();
+    let token = localStorage.getItem('Authorization');
 
+    if (whiteList.indexOf(to.path) < 0) { //访问了需要登录才能访问的页面
+        if (isLogin === true && nowTime <= time + 2592000000 && token != null && token != '') { //登录过来直接进去，30天内登录不需要重新登录
+            next();
+        } else {
+            if (to.path == '/login' || to.path == '/signup' || to.path == '/forgetPassword') {
+                next();
+            } else {
+                if (token === null || token === '') {
+                    next('/login');
+                } else {
+                    next();
+                }
+            }
+        }
+    } else {
+        next();
+    }
+
+});
+
+function routerGo() {
+    var data = [{
+            icon: "el-icon-set-up",
+            name: "角色管理",
+            roles: "superAdmin",
+            url: "/roleManage",
+            children: [{
+                name: "权限分配",
+                url: "/permissionAssignment"
+            }, {
+                name: "角色分配",
+                url: ""
+            }]
+        },
+        {
+            icon: "el-icon-user-solid",
+            name: "用户管理",
+            roles: "admin",
+            url: "/userManage"
+        },
+        {
+            icon: "el-icon-menu",
+            name: "菜单管理",
+            roles: "superAdmin",
+            url: "/menuManage"
+        },
+        {
+            icon: "el-icon-reading",
+            name: "数据字典",
+            roles: "superAdmin",
+            url: "/dataDictionary",
+            children: [{
+                name: "数据字典管理",
+                url: "/addDictionary"
+            }]
+        },
+        {
+            icon: "el-icon-folder-opened",
+            name: "系统管理",
+            roles: "common",
+            // url: "/404"
+            url: "/systemManage"
+        },
+        {
+            icon: "el-icon-s-flag",
+            name: "学校管理",
+            roles: "common",
+            // url: "/403"
+            url: "/schoolManage",
+        },
+        {
+            icon: "el-icon-school",
+            name: "班课管理",
+            roles: "common",
+            // url: "/500"
+            url: "/courseManage",
+        }
+    ]
+  console.log(localStorage.getItem('menuList'))
+      //  if (localStorage.getItem('menuList') == null || localStorage.getItem('menuList') === undefined) {
+       console.log("ss")
+        localStorage.setItem("menuList", JSON.stringify(data));
+        console.log("666")
+    // }
+    var menuList = JSON.parse(localStorage.getItem('menuList'));
+    console.log(menuList)
+    if (menuList != null) {
+        for (var i = 0; i < menuList.length; i++) {
+            // 创建路由配置
+            let url = menuList[i].url;
+            var route = {
+                path: '/',
+                component: Layout,
+                redirect: menuList[i].url,
+                roles: menuList[i].roles,
+                name: menuList[i].url.replace(/^\//, ''),
+                children: [{
+                    path: menuList[i].url.replace(/^\//, ''),
+                    component: () =>
+                        import ('@/views' + url + '/index'),
+                    name: menuList[i].url.replace(/^\//, ''),
+                    meta: { icon: menuList[i].icon, title: menuList[i].name }
+                }]
+            };
+            router.options.routes.push(route)
+            if (menuList[i].children) {
+                for (var j = 0; j < menuList[i].children.length; j++) {
+                    let curl = menuList[i].children[j].url
+                    if (curl) {
+                        var routeChild = {
+                            path: menuList[i].url,
+                            component: Layout,
+                            isShow: false,
+                            meta: {
+                                title: menuList[i].name
+                            },
+                            roles: "superAdmin",
+                            name: menuList[i].url.replace(/^\//, '') + "1",
+                            children: [{
+                                path: menuList[i].children[j].url.replace(/^\//, ''),
+                                component: () =>
+                                    import ('@/views' + url + curl),
+                                name: menuList[i].children[j].url.replace(/^\//, ''),
+                                meta: { title: menuList[i].children[j].name }
+                            }]
+                        };
+                        router.options.routes.push(routeChild);
+                    }
+                }
+            }
+        }
+    }
+    router.addRoutes(router.options.routes)
+}
+
+
+// export default new Router({
+//     scrollBehavior: () => ({ y: 0 }),
+//     routes: constantRouterMap,
+//     mode: 'history', //去除#
+// })
 export default router
-
