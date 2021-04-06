@@ -1,42 +1,70 @@
-import Vue from 'vue';
-import App from './App.vue';
-import router from './router';
-import ElementUI from 'element-ui';
-import store from './store'
-import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
-// import './assets/css/theme-green/index.css'; // 浅绿色主题
-import './assets/css/icon.css';
-import axios from 'axios'
-import '../axios'
-// import '../config/axios'
+import Vue from 'vue'
+// import 'normalize.css/normalize.css'
 
-Vue.prototype.$ajax = axios
+// element-ui
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+// import locale from 'element-ui/lib/locale/lang/en'
+import '@/styles/index.scss'
+import App from './App'
+import router from './router'
+import store from './store'
+import '@/icons'
+import axios from 'axios'
+import VueResource from 'vue-resource'
+import authority from '@/store/authority'
+import menuList from '@/store/menuList'
+import moment from 'moment'
+import './../utils/axios'
+Vue.prototype.$moment = moment
+Vue.prototype.authority = authority
+Vue.prototype.menuList = menuList
+Vue.use(VueResource)
+Vue.prototype.$axios = axios
+
+Vue.use(ElementUI)
+import { Message } from 'element-ui';
+
+Vue.prototype.$message = Message;
 
 Vue.config.productionTip = false
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
+Vue.prototype.config = {
+    headers: {
+        "Content-Type": "application/json"
+    }
+}
+Vue.http.interceptors.push((request, next) => {　 //http拦截
+    request.headers.set('token', localStorage.getItem('Authorization')) // 请求headers携带参数
+    next((response) => {
+        if (response.status === 200) {
+            if (response.data.respCode == "401") {
+                localStorage.removeItem('Authorization');
+                localStorage.removeItem('isLogin');
+                router.push('/login');
+            }
+            return response;
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
 
-Vue.use(ElementUI, {
-  size: 'small'
+        } else {
+            if (response.status == 401) {
+                localStorage.removeItem('Authorization');
+                localStorage.removeItem('isLogin');
+                router.push('/login');
+            } else if (response.status != 500 && response.status != 403 && response.status != 404) {
+                // 错误处理
+                response.status = 'error'
+            }
+            return Promise.reject(response.status) // 必须返回
+        }
+    });
+
 });
 
-// 添加请求拦截器，在请求头中加token
-axios.interceptors.request.use(
-  config => {
-    if(config.url.indexOf('/Login/checkLogin') >= 0){
-      return config;
-    }
-    else{
-      if (localStorage.getItem('token') && localStorage.getItem('token') != "undefined") {
-        config.headers.token = localStorage.getItem('token');
-      }
-      return config;
-    }
-  },
-  error => {
-    return Promise.reject(error);
-  });
+new Vue({
+    el: '#app',
+    router,
+    store,
+    render: h => h(App)
+})
