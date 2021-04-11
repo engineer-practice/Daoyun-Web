@@ -303,8 +303,13 @@ export default {
       );
       this.$http.get("/api/schools").then(
         res => {
+          console.log("this.data = "+this.data)
           this.data = res.data;
-          this.id = res.data[0].id;
+          console.log("res.data = "+JSON.stringify(res.data))
+          // this.id = res.data[0].id;
+          ///////////////////////////////////////////////////////
+          // this.id = 0;
+          ///////////////////////////////////////////////////////
         },
         res => {
           this.$router.push({
