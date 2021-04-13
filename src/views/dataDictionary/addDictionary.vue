@@ -309,8 +309,8 @@ export default {
             this.$http.post("/api/dictionaries", data).then(
               res => {
                 console.log("res.data.respCode = "+res.data.respCode)
-                // if (res.data.respCode == "1") {
-                if (res.data.respCode != "1") {
+                if (res.data.respCode == "1") {
+                // if (res.data.respCode != "1") {
                   this.$alert("数据字典添加成功", "成功", {
                     confirmButtonText: "确定"
                   });

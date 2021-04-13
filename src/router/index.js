@@ -148,16 +148,9 @@ function routerGo() {
     {
         icon: "el-icon-user-solid",
         name: "用户管理",
-        // roles: "admin",
-        roles: "common",
-        url: "/userManage"
-    },
-    {
-        icon: "el-icon-menu",
-        name: "菜单管理",
-        roles: "superAdmin",
+        roles: "admin",
         // roles: "common",
-        url: "/menuManage"
+        url: "/userManage"
     },
     {
         icon: "el-icon-reading",
@@ -171,11 +164,20 @@ function routerGo() {
         }]
     },
     {
+        icon: "el-icon-menu",
+        // name: "菜单管理",
+        name: "系统参数管理",
+        // roles: "superAdmin",
+        roles: "common",
+        url: "/menuManage"
+    },
+    {
         icon: "el-icon-folder-opened",
         name: "系统参数管理",
-        roles: "common",
+        roles: "superAdmin",
+        // roles: "common",
         // url: "/404"
-        url: "/systemManage"
+        url: "/systemManage",
     },
     {
         icon: "el-icon-s-flag",
@@ -189,7 +191,8 @@ function routerGo() {
         icon: "el-icon-school",
         name: "班课管理",
         // roles: "common",
-        roles: "admin",
+        // roles: "admin",
+        roles: "superAdmin",
         url: "/500"
         // url: "/courseManage",
     },
