@@ -152,6 +152,7 @@ export default {
     };
   },
   created() {
+    console.log("this.$route.query.code??????????????? = "+this.$route.query.code)
     if (this.$route.query.code != undefined) {
       this.isEdit = true;
       this.getDetails(this.$route.query.code);
@@ -160,6 +161,7 @@ export default {
   methods: {
     getDetails(code) {
       this.listLoading = true;
+      console.log("code???????????????? = "+code)
       this.$http.get("/api/dictionaries?code=" + code).then(
         res => {
           this.listLoading = false;

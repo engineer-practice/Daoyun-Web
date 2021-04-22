@@ -11,7 +11,7 @@
       <div>
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="密码登录" name="1"></el-tab-pane>
-          <el-tab-pane label="验证码登录" name="2"></el-tab-pane>
+          <el-tab-pane label="手机号登录" name="2"></el-tab-pane>
         </el-tabs>
       </div>
       <el-form
@@ -76,7 +76,7 @@
             type="text"
             v-model="loginForm1.username"
             autocomplete="on"
-            placeholder="请输入邮箱"
+            placeholder="请输入手机号"
           ></el-input>
         </el-form-item>
         <el-form-item prop="message">
@@ -143,10 +143,10 @@ export default {
       },
       loginRules1: {
         username: [
-          { required: true, trigger: "blur", message: "请输入邮箱" },
+          { required: true, trigger: "blur", message: "请输入手机号" },
           {
-            type: "email",
-            message: "请输入正确的邮箱地址",
+            // type: "email",
+            message: "请输入正确的手机号码",
             trigger: ["blur", "change"],
           },
         ],
@@ -200,13 +200,18 @@ export default {
       this.$refs.loginForm1.validateField("username", errMsg => {
         if (errMsg) {
         } else {
+          console.log("this.loginForm1.username = "+this.loginForm1.username)
           var data = {
-            email: this.loginForm1.username
+            // email: this.loginForm1.username
+            telephone: this.loginForm1.username
           };
-          this.$http.post("/api/sendCode", data).then(
+          this.$http.post("/api/sendMessage", null, {
+                params: data
+              }).then(
             res => {
-              if (res.data.respCode == "请输入真实邮箱") {
-                this.$alert("请输入真实邮箱!", "失败", {
+              console.log("sendcoderes.data = "+JSON.stringify(res.data))
+              if (res.data.respCode == "请输入真实手机号") {
+                this.$alert("请输入真实手机号!", "失败", {
                   confirmButtonText: "确定"
                 });
               } else {
@@ -260,7 +265,7 @@ export default {
       //       localStorage.setItem("validateCode", res.data);
       // });
       console.log("准备调用")
-      get('/api/sendCode',data).then(res =>{console.log("res ="+JSON.stringify(res))})
+      // get('/api/sendCode',data).then(res =>{console.log("res ="+JSON.stringify(res))})
       console.log("准备结束")
 
       /////////////////////////////////////////////////////////////////////////
@@ -274,9 +279,13 @@ export default {
               password: this.loginForm.password
             };
             localStorage.setItem("roleEmail", data.email);
-            this.$http.post("/api/loginByPassword", data).then(
+            // this.$http.post("/api/loginByPassword", data).then(
+              this.$http.post("/api/loginByPassword", null, {
+                params: data
+              }).then(
               res => {
-                if (res.data.respCode == "1") {
+                console.log("res.data = "+JSON.stringify(res.data));
+                if (res.data.result == true) {
                   this.loading = false;
                   //登录成功
                   if (res.data.role != "3") {
@@ -341,13 +350,17 @@ export default {
             } else {
               this.loading = true;
               var data = {
-                email: this.loginForm1.username
+                telephone: this.loginForm1.username
               };
-              this.$http.post("/api/loginByCode", data).then(
+              this.$http.post("/api/loginByMessage", null, {
+                params: data
+              }).then(
+              // this.$http.post("/api/loginByCode", data).then(
                 res => {
+                  console.log("res.data = "+JSON.stringify(res.data));
                   this.loading = false;
-                  if (res.data.respCode == "1") {
-                    //登录成功
+                  if (res.data.result == true) {
+                    //登录成功914392
                     if (res.data.role != "3") {
                       localStorage.setItem("roleId", res.data.role);
                       if (res.data.role == "0") {

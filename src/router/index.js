@@ -165,17 +165,17 @@ function routerGo() {
     },
     {
         icon: "el-icon-menu",
-        // name: "菜单管理",
-        name: "系统参数管理",
-        // roles: "superAdmin",
-        roles: "common",
+        name: "菜单管理",
+        // name: "系统参数管理",
+        roles: "superAdmin",
+        // roles: "common",
         url: "/menuManage"
     },
     {
         icon: "el-icon-folder-opened",
         name: "系统参数管理",
-        roles: "superAdmin",
-        // roles: "common",
+        // roles: "superAdmin",
+        roles: "common",
         // url: "/404"
         url: "/systemManage",
     },
