@@ -422,7 +422,7 @@ export default {
             .then(
               res => {
                 this.listLoading = false;
-                this.totalNum = res.data[0].totalCount;
+                // this.totalNum = res.data[0].totalCount;
                 if (this.totalNum != 0) {
                   delete res.data[0];
                   this.list = res.data;
@@ -455,7 +455,7 @@ export default {
         .then(
           res => {
             this.listLoading = false;
-            this.totalNum = res.data[0].totalCount;
+            // this.totalNum = res.data[0].totalCount;
             if (this.totalNum != 0) {
               delete res.data[0];
               this.list = res.data;

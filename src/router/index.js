@@ -134,8 +134,8 @@ function routerGo() {
     {
         icon: "el-icon-set-up",
         name: "角色管理",
-        // roles: "common",
-        roles: "superAdmin",
+        roles: "common",
+        // roles: "superAdmin",
         url: "/roleManage",
         children: [{
             name: "权限分配",
@@ -148,8 +148,8 @@ function routerGo() {
     {
         icon: "el-icon-user-solid",
         name: "用户管理",
-        roles: "admin",
-        // roles: "common",
+        // roles: "admin",
+        roles: "common",
         url: "/userManage"
     },
     {
@@ -167,8 +167,8 @@ function routerGo() {
         icon: "el-icon-menu",
         name: "菜单管理",
         // name: "系统参数管理",
-        roles: "superAdmin",
-        // roles: "common",
+        // roles: "superAdmin",
+        roles: "common",
         url: "/menuManage"
     },
     {
@@ -182,19 +182,19 @@ function routerGo() {
     {
         icon: "el-icon-s-flag",
         name: "学校管理",
-        // roles: "common",
-        roles: "admin",
-        url: "/403"
-        // url: "/schoolManage",
+        roles: "common",
+        // roles: "admin",
+        // url: "/403"
+        url: "/schoolManage",
     },
     {
         icon: "el-icon-school",
         name: "班课管理",
-        // roles: "common",
+        roles: "common",
         // roles: "admin",
-        roles: "superAdmin",
-        url: "/500"
-        // url: "/courseManage",
+        // roles: "superAdmin",
+        // url: "/500"
+        url: "/courseManage",
     },
     ]
     console.log("localStorage.getItem('menuList') = "+localStorage.getItem('menuList'))

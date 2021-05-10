@@ -265,7 +265,7 @@ export default {
       //       localStorage.setItem("validateCode", res.data);
       // });
       console.log("准备调用")
-      // get('/api/sendCode',data).then(res =>{console.log("res ="+JSON.stringify(res))})
+      get('/api/sendCode',data).then(res =>{console.log("res ="+JSON.stringify(res))})
       console.log("准备结束")
 
       /////////////////////////////////////////////////////////////////////////
@@ -275,7 +275,7 @@ export default {
             this.loading = true;
             //密码登录
             var data = {
-              email: this.loginForm.username,
+              account: this.loginForm.username,
               password: this.loginForm.password
             };
             localStorage.setItem("roleEmail", data.email);

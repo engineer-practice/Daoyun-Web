@@ -5,16 +5,35 @@
     <!-- <el-form :model="Check" ref="forgetform" class="forgetform"> -->
     <el-form  ref="forgetform" class="forgetform">
         
-        <el-form-item label="旧密码" prop="oldPsd">
-            <el-input type="password" v-model="ruleForm.oldPsd" placeholder="请输入旧密码"></el-input>
+        <el-form-item label="账号验证" prop="zhanghao">
+            <el-input  v-model="ruleForm.zhanghao" placeholder="请输入您的账号"></el-input>
         </el-form-item>
-        
-
+        <el-form-item prop="message">
+        <el-row>
+          <el-col :span="15">
+            <el-input
+              prefix-icon="el-icon-message"
+              name="password"
+              v-model="ruleForm.message"
+              autocomplete="on"
+              placeholder="请输入验证码"
+            />
+          </el-col>
+          <el-col :span="8" :offset="1">
+            <el-button
+              type="primary"
+              plain
+              :disabled="isDisabled"
+              @click="getPhoneMessage()"
+              id="dyMobileButton"
+            >{{butName}}</el-button>
+          </el-col>
+        </el-row>
+    </el-form-item>
         <el-form-item label="新密码" prop="newPsd">
             <el-input type="password" v-model="ruleForm.newPsd" placeholder="请输入新密码"></el-input>
         </el-form-item>
-
-
+        
         <el-form-item label="确认新密码" prop="checkNewPsd">
             <el-input type="password" v-model="ruleForm.checkNewPsd" placeholder="请再次输入新密码"></el-input>
         </el-form-item>
@@ -34,80 +53,129 @@
 export default {
   // components: {
   // },
-    data() {
-    var validatePass = (rule, value, callback) => {
-        if (value === "") {
-        callback(new Error("请输入密码"));
-        } else {
-        if (this.ruleForm.checkNewPsd !== "") {
-            this.$refs.ruleForm.validateField("checkNewPsd");
-        }
-        callback();
-        }
-    };
+  data() {
+    // var validatePass = (rule, value, callback) => {
+    //   if (value === "") {
+    //     callback(new Error("请输入密码"));
+    //   } else {
+    //     if (this.ruleForm.checkNewPsd !== "") {
+    //       this.$refs.ruleForm.validateField("checkNewPsd");
+    //     }
+    //     callback();
+    //   }
+    // };
     var validatePass2 = (rule, value, callback) => {
-        if (value === "") {
+      if (value === "") {
         callback(new Error("请再次输入密码"));
-        } else if (value !== this.ruleForm.newPsd) {
+      } else if (value !== this.ruleForm.newPsd) {
         callback(new Error("两次输入密码不一致!"));
-        } else {
+      } else {
         callback();
-        }
+      }
     };
     return {
-        loading: false,
-        ruleForm: {},
-        userData: {},
-        rules: {
-        oldPsd: [{ required: true, message: "请输入密码", trigger: "blur" }],
-        newPsd: [{ validator: validatePass, trigger: "blur" }],
-        checkNewPsd: [{ validator: validatePass2, trigger: "blur" }]
-        }
+      loading: false,
+       isDisabled: false,
+       butName: "获取验证码",
+      ruleForm: {},
+      userData: {},
+      rules: {
+        zhanghao: [
+          { required: true, message: "请输入您的账号", trigger: "blur" },
+        ],
+        message: [{ required: true, trigger: "blur", message: "请输入验证码" }],
+        newPsd: [{  trigger: "blur" }],
+        checkNewPsd: [{ validator: validatePass2, trigger: "blur" }],
+      },
     };
+  },
+  methods: {
+    changeConfirm() {
+      this.$router.push({ path: "/login", query: {} });
     },
-    methods: {
-            changeConfirm(){
-                this.$router.push({path:'/login',query:{}});
-            }
-        }
+    getPhoneMessage() {//获取手机验证码
+      var time = 60;
+    //   this.$refs.ruleForm.validateField("username", errMsg => {
+        // if (errMsg) {
+        // } else {
+          var data = {
+            telephone: this.ruleForm.zhanghao
+          };
+          this.$http.post("/api/sendMessage", null, {
+                params: data
+              }).then(
+            res => {
+                console.log("短信验证码为 ： "+ res.data.respCode)
+                if (res.data.respCode == "请输入真实手机号") {
+                this.$alert("请输入真实手机号!", "失败", {
+                  confirmButtonText: "确定"
+                });
+              } else {
+              localStorage.setItem("validateCode", res.data.respCode);
+              }
+            },
+            res => {
+                this.$router.push({
+                  path: "/" + res
+                });
+              }
+            
+          );
 
+          //倒计时
+          let timer = setInterval(() => {
+            if (time == 0) {
+              clearInterval(timer);
+              this.isDisabled = false;
+              this.butName = "获取验证码";
+            } else {
+              this.butName = time + "秒后重试";
+              this.isDisabled = true;
+              time--;
+            }
+          }, 1000);
+        // }
+    //   });
+    },
+  },
 };
 </script>
 <style scoped>
 .forget-wrap {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background-image: url(../../assets/img/login-bg.jpg);
-    background-size: 100%;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-image: url(../../assets/img/login-bg.jpg);
+  background-size: 100%;
 }
 .ms-title {
-    width: 100%;
-    line-height: 50px;
-    text-align: center;
-    font-size: 20px;
-    color: #fff;
-    border-bottom: 1px solid #ddd;
+  width: 100%;
+  line-height: 50px;
+  text-align: center;
+  font-size: 20px;
+  color: rgb(10, 142, 250);
+  border-bottom: 1px solid #ddd;
 }
 .ms-forget {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 350px;
-    margin: -190px 0 0 -175px;
-    border-radius: 5px;
-    background: rgba(255, 255, 255, 0.3);
-    overflow: hidden;
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  width: 400px;
+  margin: -190px 0 0 -175px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.3);
+  overflow: hidden;
 }
 .forgetform {
-    padding: 30px 30px;
+  padding: 30px 30px;
+  /* color:rgb(10, 142, 250); */
 }
 .passwordreset-btn {
-    text-align: center;
+  text-align: center;
 }
 .passwordreset-btn button {
-    width: 100%;
-    height: 36px;
-    margin-bottom: 10px;
+  width: 100%;
+  height: 36px;
+  margin-bottom: 10px;
 }
 </style>

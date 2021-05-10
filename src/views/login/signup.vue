@@ -140,7 +140,7 @@
         </el-row>
       <!-- lgs ////////////////////////////////////////////////////////////////////-->
       </el-form-item>
-      <el-form-item prop="pass">
+      <!-- <el-form-item prop="pass">
         <el-input
           prefix-icon="el-icon-lock"
           type="password"
@@ -157,7 +157,7 @@
           autocomplete="off"
           placeholder="请确认密码"
         ></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <el-button
         type="primary"
         style="width:100%;margin-bottom:10px;"
