@@ -342,7 +342,7 @@ export default {
           }
         }
       }
-      if (auth) {
+      if (!auth) {
         if (this.multipleSelection.length == 0) {
           this.$alert("请至少选中一条数据", "批量删除", {
             confirmButtonText: "确定"
@@ -400,7 +400,7 @@ export default {
           }
         }
       }
-      if (auth) {
+      if (!auth) {
         this.list = [];
         this.listLoading = true;
         var roleId = localStorage.getItem("roleId");
@@ -408,6 +408,7 @@ export default {
           this.showUserInfo(this.page);
         } else {
           this.page = 1;
+          roleId = 1;
           this.$http
             .get(
               "/api/user?page=" +
@@ -416,6 +417,8 @@ export default {
                 this.formInline.state +
                 "&name=" +
                 this.formInline.username +
+                "&size=" +
+                10 +
                 "&roleId=" +
                 roleId
             )
@@ -424,8 +427,8 @@ export default {
                 this.listLoading = false;
                 // this.totalNum = res.data[0].totalCount;
                 if (this.totalNum != 0) {
-                  delete res.data[0];
-                  this.list = res.data;
+                  // delete res.data[0];
+                  this.list = res.data.dataList;
                 }
               },
               res => {
@@ -450,15 +453,33 @@ export default {
         page: this.page
       };
       var roleId = localStorage.getItem("roleId");
+      roleId = 1;
+      console.log("this.page = "+this.page)
+       console.log("this.roldId = "+roleId)
+       var size =10;
+       var data = {
+              name: "野人",
+              page: 1,
+              roleId: 1,
+              size: 10,
+              state:"0"
+            };
       this.$http
-        .get("/api/user?page=" + this.page + "&state=&name=&roleId=" + roleId)
-        .then(
-          res => {
+        .get("/api/user?page=" + this.page + "&state=&name=&roleId=" + 1 +"&size=" + 10)
+        // .get("/api/user", data)
+        // this.$http.get("/api/user", null, {
+        //         params: data
+        //       })
+              .then(
+          res => {  
+             console.log("succeed succeed succeed succeed succeed")
+             this.list = res.data.dataList;
             this.listLoading = false;
+             this.totalNum = res.data.total;
             // this.totalNum = res.data[0].totalCount;
             if (this.totalNum != 0) {
-              delete res.data[0];
-              this.list = res.data;
+              // delete res.data[0];
+              this.list = res.data.dataList;
             }
           },
           res => {
@@ -484,7 +505,7 @@ export default {
           }
         }
       }
-      if (auth) {
+      if (!auth) {
         this.reset();
         this.dialogFormVisible = true;
         this.title = "新增用户";
@@ -500,10 +521,11 @@ export default {
           this.dialogFormVisible = false;
           if (this.title == "新增用户") {
             var data = {
+              email: this.ruleForm.email,
               name: this.ruleForm.name,
-              sex: this.ruleForm.sex,
               roleId: this.ruleForm.roleId,
-              email: this.ruleForm.email
+              sex: this.ruleForm.sex,
+              
             };
             this.$http.post("/api/user", data).then(
               res => {
@@ -588,7 +610,7 @@ export default {
           }
         }
       }
-      if (auth) {
+      if (!auth) {
         this.ruleForm = row;
         this.ruleForm.sex = this.ruleForm.sex.toString();
         this.ruleForm.roleId = this.ruleForm.roleId.toString();

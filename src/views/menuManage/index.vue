@@ -380,7 +380,7 @@ export default {
           }
         }
       }
-      if (auth) {
+      if (!auth) {
         var del_list = [];
         del_list.push(row.id);
         this.$confirm("确定要删除该菜单？", "删除菜单", {
@@ -422,7 +422,7 @@ export default {
           }
         }
       }
-      if (auth) {
+      if (!auth) {
         if (this.multipleSelection.length == 0) {
           this.$alert("请至少选中一条数据", "批量删除", {
             confirmButtonText: "确定"
@@ -484,7 +484,7 @@ export default {
           }
         }
       }
-      if (auth) {
+      if (!auth) {
         this.menuForm = row;
         this.menuForm.parentId = this.menuForm.parentId.toString();
         this.menuForm.isPage = this.menuForm.isPage.toString();
