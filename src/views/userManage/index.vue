@@ -262,14 +262,15 @@ export default {
           }
         }
       }
-      if ((auth && row.state == 1) || (auth1 && row.state == 0)) {
+      if ((!auth && row.state == 1) || (!auth1 && row.state == 0)) {
         this.$http.patch("/api/user", data).then(
           res => {
             // success callback
-            if (res.data.respCode == "1") {
+            if (res.data.respCode !== "1") {
               this.$alert("状态修改成功", "成功", {
                 confirmButtonText: "确定"
               });
+              row.state = !row.state;
               this.showUserInfo(this.page);
             } else {
               this.$alert(res.data.respCode, "失败", {
@@ -505,7 +506,7 @@ export default {
           }
         }
       }
-      if (!auth) {
+      if (auth) {
         this.reset();
         this.dialogFormVisible = true;
         this.title = "新增用户";

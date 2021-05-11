@@ -285,7 +285,7 @@ export default {
           auth = 1;
         }
       }
-      if (auth) {
+      if (!auth) {
         this.reset();
         this.dialogFormVisible = true;
         this.title = "新增菜单";

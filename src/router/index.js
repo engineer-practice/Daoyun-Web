@@ -167,7 +167,7 @@ function routerGo() {
         icon: "el-icon-menu",
         name: "菜单管理",
         // name: "系统参数管理",
-        // roles: "superAdmin",
+        // roles: "Admin",
         roles: "common",
         url: "/menuManage"
     },
@@ -182,8 +182,8 @@ function routerGo() {
     {
         icon: "el-icon-s-flag",
         name: "学校管理",
-        roles: "common",
-        // roles: "admin",
+        // roles: "common",
+        roles: "admin",
         // url: "/403"
         url: "/schoolManage",
     },
