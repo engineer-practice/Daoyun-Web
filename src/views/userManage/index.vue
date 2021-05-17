@@ -343,6 +343,7 @@ export default {
         for (var i = 0; i < authority.length; i++) {
           if (authority[i] == "2") {
             auth = 1;
+            
           }
         }
       }
