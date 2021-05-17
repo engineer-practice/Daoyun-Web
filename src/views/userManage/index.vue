@@ -135,8 +135,10 @@
               :value="item.value"
             ></el-option>
           </el-select>-->
-          <el-radio v-model="ruleForm.roleId" label="0" :disabled="roleAu==false">老师</el-radio>
-          <el-radio v-model="ruleForm.roleId" label="1" :disabled="roleAu==false">管理员</el-radio>
+          <!-- <el-radio v-model="ruleForm.roleId" label="0" :disabled="roleAu==false">老师</el-radio>
+          <el-radio v-model="ruleForm.roleId" label="1" :disabled="roleAu==false">管理员</el-radio> -->
+          <el-radio v-model="ruleForm.roleId" label="0" >老师</el-radio>
+          <el-radio v-model="ruleForm.roleId" label="1" >管理员</el-radio>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" style="text-align: center;margin-bottom:10px">
@@ -149,6 +151,8 @@
         style="text-align: center;color: #5d5b5b;font-size:14px"
         v-if="title=='新增用户'"
       >
+
+      
         <span>新增用户状态默认为正常</span>
       </div>
     </el-dialog>
@@ -506,7 +510,7 @@ export default {
           }
         }
       }
-      if (auth) {
+      if (!auth) {
         this.reset();
         this.dialogFormVisible = true;
         this.title = "新增用户";
