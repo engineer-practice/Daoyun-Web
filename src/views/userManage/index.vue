@@ -151,8 +151,6 @@
         style="text-align: center;color: #5d5b5b;font-size:14px"
         v-if="title=='新增用户'"
       >
-
-      
         <span>新增用户状态默认为正常</span>
       </div>
     </el-dialog>
