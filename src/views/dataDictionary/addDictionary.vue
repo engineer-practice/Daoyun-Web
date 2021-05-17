@@ -152,6 +152,7 @@ export default {
     };
   },
   created() {
+    console.log("this.$route.query.code??????????????? = "+this.$route.query.code)
     if (this.$route.query.code != undefined) {
       this.isEdit = true;
       this.getDetails(this.$route.query.code);
@@ -160,6 +161,7 @@ export default {
   methods: {
     getDetails(code) {
       this.listLoading = true;
+      console.log("code???????????????? = "+code)
       this.$http.get("/api/dictionaries?code=" + code).then(
         res => {
           this.listLoading = false;
@@ -308,7 +310,9 @@ export default {
             };
             this.$http.post("/api/dictionaries", data).then(
               res => {
+                console.log("res.data.respCode = "+res.data.respCode)
                 if (res.data.respCode == "1") {
+                // if (res.data.respCode != "1") {
                   this.$alert("数据字典添加成功", "成功", {
                     confirmButtonText: "确定"
                   });
@@ -317,12 +321,13 @@ export default {
                     confirmButtonText: "确定"
                   });
                 }
+                this.$router.push({path: "/dataDictionary"})
               },
-              res => {
-                this.$router.push({
-                  path: "/" + res
-                });
-              }
+              // res => {
+              //   this.$router.push({
+              //     path: "/" + res
+              //   });
+              // }
             );
           } else {
             //修改数据字典

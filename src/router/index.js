@@ -16,43 +16,43 @@ const router = new Router({
             path: '/login',
             // redirect: '/login',
             component: () =>
-                import ('@/views/login/index'),
+                import('@/views/login/index'),
             hidden: true,
         },
         {
             path: '/signup',
             component: () =>
-                import ('@/views/login/signup'),
+                import('@/views/login/signup'),
             hidden: true,
         },
         {
             path: '/forgetPassword',
             component: () =>
-                import ('@/views/login/forgetPassword'),
+                import('@/views/login/forgetPassword'),
             hidden: true,
         },
         {
             path: '/404',
             component: () =>
-                import ('@/views/errorPage/404'),
+                import('@/views/errorPage/404'),
             hidden: true
         },
         {
             path: '/403',
             component: () =>
-                import ('@/views/errorPage/403'),
+                import('@/views/errorPage/403'),
             hidden: true
         },
         {
             path: '/500',
             component: () =>
-                import ('@/views/errorPage/500'),
+                import('@/views/errorPage/500'),
             hidden: true
         },
         {
             path: '/error',
             component: () =>
-                import ('@/views/errorPage/error'),
+                import('@/views/errorPage/error'),
             hidden: true
         },
         {
@@ -64,7 +64,7 @@ const router = new Router({
             children: [{
                 path: 'home',
                 component: () =>
-                    import ('@/views/home/index'),
+                    import('@/views/home/index'),
                 name: 'home',
                 meta: { title: '首页', icon: 'el-icon-s-home', noCache: true }
             }]
@@ -79,7 +79,7 @@ const router = new Router({
             children: [{
                 path: 'information',
                 component: () =>
-                    import ('@/views/information/index'),
+                    import('@/views/information/index'),
                 name: 'information',
                 meta: { title: '个人信息', icon: 'dashboard', noCache: false },
 
@@ -130,68 +130,78 @@ router.beforeEach((to, from, next) => {
 });
 
 function routerGo() {
-    var data = [{
-            icon: "el-icon-set-up",
-            name: "角色管理",
-            roles: "superAdmin",
-            url: "/roleManage",
-            children: [{
-                name: "权限分配",
-                url: "/permissionAssignment"
-            }, {
-                name: "角色分配",
-                url: ""
-            }]
-        },
-        {
-            icon: "el-icon-user-solid",
-            name: "用户管理",
-            roles: "admin",
-            url: "/userManage"
-        },
-        {
-            icon: "el-icon-menu",
-            name: "菜单管理",
-            roles: "superAdmin",
-            url: "/menuManage"
-        },
-        {
-            icon: "el-icon-reading",
-            name: "数据字典",
-            roles: "superAdmin",
-            url: "/dataDictionary",
-            children: [{
-                name: "数据字典管理",
-                url: "/addDictionary"
-            }]
-        },
-        {
-            icon: "el-icon-folder-opened",
-            name: "系统管理",
-            roles: "common",
-            // url: "/404"
-            url: "/systemManage"
-        },
-        {
-            icon: "el-icon-s-flag",
-            name: "学校管理",
-            roles: "common",
-            // url: "/403"
-            url: "/schoolManage",
-        },
-        {
-            icon: "el-icon-school",
-            name: "班课管理",
-            roles: "common",
-            // url: "/500"
-            url: "/courseManage",
-        }
+    var data = [
+    {
+        icon: "el-icon-set-up",
+        name: "角色管理",
+        roles: "common",
+        // roles: "superAdmin",
+        url: "/roleManage",
+        children: [{
+            name: "权限分配",
+            url: "/permissionAssignment"
+        }, {
+            name: "角色分配",
+            url: ""
+        }]
+    },
+    {
+        icon: "el-icon-user-solid",
+        name: "用户管理",
+        // roles: "admin",
+        roles: "common",
+        url: "/userManage"
+    },
+    {
+        icon: "el-icon-reading",
+        name: "数据字典管理",
+        // roles: "superAdmin",
+        roles: "common",
+        url: "/dataDictionary",
+        children: [{
+            name: "数据字典管理",
+            url: "/addDictionary"
+        }]
+    },
+    {
+        icon: "el-icon-menu",
+        name: "菜单管理",
+        // name: "系统参数管理",
+        // roles: "Admin",
+        roles: "common",
+        url: "/menuManage"
+    },
+    {
+        icon: "el-icon-folder-opened",
+        name: "系统参数管理",
+        // roles: "superAdmin",
+        roles: "common",
+        // url: "/404"
+        url: "/systemManage",
+    },
+    {
+        icon: "el-icon-s-flag",
+        name: "学校管理",
+        // roles: "common",
+        roles: "admin",
+        // url: "/403"
+        url: "/schoolManage",
+    },
+    {
+        icon: "el-icon-school",
+        name: "班课管理",
+        roles: "common",
+        // roles: "admin",
+        // roles: "superAdmin",
+        // url: "/500"
+        url: "/courseManage",
+    },
     ]
-  console.log(localStorage.getItem('menuList'))
-      //  if (localStorage.getItem('menuList') == null || localStorage.getItem('menuList') === undefined) {
-       console.log("ss")
-        localStorage.setItem("menuList", JSON.stringify(data));
-        console.log("666")
+    console.log("localStorage.getItem('menuList') = "+localStorage.getItem('menuList'))
+    //  if (localStorage.getItem('menuList') == null || localStorage.getItem('menuList') === undefined) {
+    console.log("ss")
+    localStorage.setItem("menuList", JSON.stringify(data));
+    console.log("666")
     // }
     var menuList = JSON.parse(localStorage.getItem('menuList'));
     console.log(menuList)
@@ -208,7 +218,7 @@ function routerGo() {
                 children: [{
                     path: menuList[i].url.replace(/^\//, ''),
                     component: () =>
-                        import ('@/views' + url + '/index'),
+                        import('@/views' + url + '/index'),
                     name: menuList[i].url.replace(/^\//, ''),
                     meta: { icon: menuList[i].icon, title: menuList[i].name }
                 }]
@@ -230,7 +240,7 @@ function routerGo() {
                             children: [{
                                 path: menuList[i].children[j].url.replace(/^\//, ''),
                                 component: () =>
-                                    import ('@/views' + url + curl),
+                                    import('@/views' + url + curl),
                                 name: menuList[i].children[j].url.replace(/^\//, ''),
                                 meta: { title: menuList[i].children[j].name }
                             }]

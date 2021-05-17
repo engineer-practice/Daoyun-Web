@@ -285,7 +285,11 @@ export default {
           auth = 1;
         }
       }
+<<<<<<< HEAD
       if (auth) {
+=======
+      if (!auth) {
+>>>>>>> Dev
         this.reset();
         this.dialogFormVisible = true;
         this.title = "新增菜单";
@@ -380,7 +384,11 @@ export default {
           }
         }
       }
+<<<<<<< HEAD
       if (auth) {
+=======
+      if (!auth) {
+>>>>>>> Dev
         var del_list = [];
         del_list.push(row.id);
         this.$confirm("确定要删除该菜单？", "删除菜单", {
@@ -422,7 +430,11 @@ export default {
           }
         }
       }
+<<<<<<< HEAD
       if (auth) {
+=======
+      if (!auth) {
+>>>>>>> Dev
         if (this.multipleSelection.length == 0) {
           this.$alert("请至少选中一条数据", "批量删除", {
             confirmButtonText: "确定"
@@ -484,7 +496,11 @@ export default {
           }
         }
       }
+<<<<<<< HEAD
       if (auth) {
+=======
+      if (!auth) {
+>>>>>>> Dev
         this.menuForm = row;
         this.menuForm.parentId = this.menuForm.parentId.toString();
         this.menuForm.isPage = this.menuForm.isPage.toString();
