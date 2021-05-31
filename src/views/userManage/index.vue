@@ -303,6 +303,7 @@ export default {
     },
     resetPass(row) {
       //重置密码
+      
       var auth = 0;
       var authority = JSON.parse(localStorage.getItem("authority"));
       if (authority) {
