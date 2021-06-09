@@ -14,11 +14,11 @@
         <el-form-item style="float:right">
           <el-button type="primary" size="small" @click="searchData()">查询</el-button>
         </el-form-item>
-        <el-form-item label="中文标识：" style="float:right">
-          <el-input placeholder="请输入中文标识" size="small" v-model="formInline.chineseMark"></el-input>
+        <el-form-item label="名称：" style="float:right">
+          <el-input placeholder="请输入名称" size="small" v-model="formInline.chineseMark"></el-input>
         </el-form-item>
-        <el-form-item label="英文标识：" style="float:right">
-          <el-input placeholder="请输入英文标识" size="small" v-model="formInline.englishMark"></el-input>
+        <el-form-item label="关键字：" style="float:right">
+          <el-input placeholder="请输入关键字" size="small" v-model="formInline.englishMark"></el-input>
         </el-form-item>
       </el-form>
       <el-table
@@ -39,12 +39,12 @@
             <span>{{(page - 1) * pageSize + scope.$index + 1}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="中文标识" min-width="80" align="center">
+        <el-table-column label="名称" min-width="80" align="center">
           <template slot-scope="scope">
             <span>{{scope.row.name}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="英文标识" min-width="80" align="center">
+        <el-table-column label="关键字" min-width="80" align="center">
           <template slot-scope="scope">
             <span>{{scope.row.code}}</span>
           </template>
@@ -82,12 +82,12 @@
       <el-form :model="itemForm" ref="itemForm" label-width="100px" class="demo-ruleForm">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="中文标识">
+            <el-form-item label="名称">
               <el-input v-model="itemForm.name" disabled></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="英文标识">
+            <el-form-item label="关键字">
               <el-input v-model="itemForm.code" disabled></el-input>
             </el-form-item>
           </el-col>

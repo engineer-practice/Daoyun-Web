@@ -1,318 +1,468 @@
 <template>
   <div class="app-container">
     <div class="form-style">
-      <el-form
-        ref="experienceForm"
-        :model="experienceForm"
-        label-width="150px"
-        style="width: 80%;margin: 0 20px;"
-      >
-        <el-form-item
-          label="签到经验值："
-          prop="checkExperience"
-          :rules="[
-      { required: true, message: '签到经验值不能为空'},
-      { type: 'number', message: '签到经验值必须为数字值'}
-    ]"
-        >
-          <el-input v-model.number="experienceForm.checkExperience"></el-input>
+      <el-form :inline="true" :model="formInline" class="demo-form-inline">
+        <el-form-item>
+          <el-button type="primary" size="small" @click="addData()" icon="el-icon-plus">新增</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="danger" size="small" @click="deleteData()" icon="el-icon-delete">删除</el-button>
         </el-form-item>
 
-        <!-- <el-form-item
-          label="活动/作业经验值："
-          prop="workExperience"
-          :rules="[
-      { required: true, message: '活动/作业经验值不能为空'},
-      { type: 'number', message: '活动/作业经验值必须为数字值'}
-    ]"
-        >
-          <el-input v-model.number="experienceForm.workExperience"></el-input>
-        </el-form-item> -->
-        <el-row>
-          <el-col :span="11">
-            <el-form-item
-              v-for="(level, index) in experienceForm.levels"
-              :label="'出勤等级' + (index+1)"
-              :key="level.key"
-              :prop="'levels.' + index + '.value'"
-              :rules="[
-        {required: true, message: '等级不能为空', trigger: 'blur'},
-        {type: 'number', message: '等级必须为数字值'}]"
-            >
-              <el-input v-model.number="level.value">
-                <template slot="prepend">LV</template>
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="13">
-            <el-form-item
-              v-for="(attendance, index) in experienceForm.attendances"
-              :label="'出勤率' + (index+1)"
-              :key="attendance.key"
-              :prop="'attendances.' + index+'.ratio2'"
-              :rules="{
-                 required: true, message: '出勤率不能为空', trigger: 'blur'}"
-            >
-              <el-row :gutter="20">
-                <el-col :span="18">
-                  <el-row :gutter="20">
-                    <el-col :span="11">
-                      <el-input v-model="attendance.ratio1" disabled>
-                        <template slot="append" style="padding:0 10px">%</template>
-                      </el-input>
-                    </el-col>
-                    <el-col :span="1">-</el-col>
-                    <el-col :span="11">
-                      <el-input
-                        v-model="attendance.ratio2"
-                        :disabled="!(index+1==experienceForm.levels.length)"
-                      >
-                        <template slot="append" style="padding:0 10px">%</template>
-                      </el-input>
-                    </el-col>
-                  </el-row>
-                </el-col>
-                <el-col :span="1" style="margin-right:25px">
-                  <i
-                    class="el-icon-circle-plus"
-                    @click="addLevelAndAttend()"
-                    style="color:#409eff;font-size:27px;"
-                    v-show="index+1==experienceForm.levels.length&&attendance.ratio2!=''"
-                  ></i>
-                </el-col>
-                <el-col :span="1">
-                  <!-- v-show="index!=0||experienceForm.levels.length>1" -->
-                  <i
-                    class="el-icon-remove"
-                    @click.prevent="removeLevelAndAttend(attendance)"
-                    style="color:red;font-size:27px"
-                    v-show="index+1==experienceForm.levels.length && experienceForm.levels.length>1 "
-                  ></i>
-                </el-col>
-              </el-row>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-form-item
-          label="签到距离KM："
-          prop="distance"
-          :rules="[
-      { required: true, message: '距离不能为空'},
-      { type: 'number', message: '距离必须为整数值'}
-    ]"
-        >
-          <el-tooltip effect="dark" placement="top">
-            <div slot="content">
-              表示学生只有在老师一定距离范围内签到才可签到成功。
-              <br />默认0，表示不限定距离。
+      </el-form>
+
+      <el-table
+        :data="list"
+        v-loading="listLoading"
+        element-loading-text="Loading"
+        border
+        fit
+        highlight-current-row
+        ref="multipleTable"
+        tooltip-effect="dark"
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+        row-key="id"
+        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+        :header-cell-style="{background:'#eef1f6',color:'#606266'}"
+      >
+        <el-table-column type="selection" width="50"></el-table-column>
+        <!--
+        <el-table-column
+          v-for="(item,index) in tableList"
+          :key="index"
+          :label="item.label"
+          :prop="item.prop"
+        ></el-table-column>
+        -->
+        <el-table-column label="参数名称" min-width="70" align="center">
+          <template slot-scope="scope">
+            <span>{{scope.row.paraName}}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="关键字" min-width="50" align="center">
+          <template slot-scope="scope">
+            <span>{{scope.row.keyName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="值" min-width="80" align="center">
+          <template slot-scope="scope">
+            <span>{{scope.row.keyValue}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="操作" min-width="80">
+          <template slot-scope="scope">
+            <div>
+              <el-link type="primary" @click="editData(scope.row)">编辑</el-link>
+              <el-divider direction="vertical"></el-divider>
+              <el-link type="danger" @click="deleteUser(scope.row)">删除</el-link>
             </div>
-            <el-input v-model.number="experienceForm.distance"></el-input>
-          </el-tooltip>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <el-pagination
+        background
+        @current-change="handleCurrentChange"
+        layout="total, prev, pager, next"
+        :total="totalNum"
+        v-if="totalNum!=0"
+        :page-size="pageSize"
+      ></el-pagination>
+    </div>
+    <el-dialog :title="title" :visible.sync="dialogFormVisible">
+      <el-form
+        :model="menuForm"
+        :rules="menus"
+        ref="menuForm"
+        label-width="150px"
+        class="demo-menuForm"
+      >
+        <el-form-item label="参数名称" prop="paraName">
+          <el-input v-model="menuForm.paraName"></el-input>
         </el-form-item>
-        <el-form-item style="text-align:center">
-          <el-button type="primary" @click="onSubmit('experienceForm')" style="width:40%">保存</el-button>
-          <el-button @click="resetForm('experienceForm')" style="width:40%">重置为初始值</el-button>
+       <el-form-item label="关键字" prop="keyName">
+          <el-input v-model="menuForm.keyName"></el-input>
+        </el-form-item>
+        <el-form-item label="值" prop="keyValue">
+          <el-input v-model="menuForm.keyValue"></el-input>
         </el-form-item>
       </el-form>
-    </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm('menuForm')">保存</el-button>
+        <el-button @click="resetForm('menuForm')">取消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
+
 <script>
 export default {
   data() {
     return {
-      experienceForm: {
-        levels: [
-          {
-            value: ""
-          }
-        ],
-        attendances: [
-          {
-            ratio1: "0",
-            ratio2: ""
-          }
-        ],
-        checkExperience: "",
-        workExperience: "",
-        distance: -1
+      list: [],
+      tableList: [
+        {
+          label: "参数名称",
+          prop: "paraName"
+        },
+        {
+          label: "关键字",
+          prop: "keyName"
+        },
+        {
+          label: "值",
+          prop: "keyValue"
+        },
+      ],
+      AllData: [],
+      listLoading: false,
+      multipleSelection: [],
+      dialogFormVisible: false,
+      parentList: [],
+      menuForm: {
+        parentId: "",
+        paraName: "",
+        keyValue: "",
+        keyName: ""
       },
-      experienceFormInit: {
-        levels: [
-          {
-            value: 0
-          },
-          {
-            value: 1
-          },
-          {
-            value: 2
-          },
-          {
-            value: 3
-          },
-          {
-            value: 4
-          }
+      menus: {
+        parentId: [
+          { required: true, message: "请选择上级菜单", trigger: "change" }
         ],
-        attendances: [
-          {
-            ratio1: "0",
-            ratio2: "0"
-          },
-          {
-            ratio1: "0",
-            ratio2: "20"
-          },
-          {
-            ratio1: "20",
-            ratio2: "50"
-          },
-          {
-            ratio1: "50",
-            ratio2: "70"
-          },
-          {
-            ratio1: "70",
-            ratio2: "100"
-          }
-        ],
-        checkExperience: 2,
-        workExperience: 2,
-        distance: 0
+        paraName: [{ required: true, message: "参数名称必填", trigger: "blur" }],
+        keyName: [{ required: true, message: "关键字必填", trigger: "blur" }],
+        keyValue: [{ required: true, message: "值必填", trigger: "blur" }],
+      },
+      totalNum: 0,
+      title: "新增用户",
+      pageSize: 10,
+      page: 1,
+
+      formInline: {
+        menus: "",
+        state: ""
       }
     };
   },
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        published: "success",
+        draft: "gray",
+        deleted: "danger"
+      };
+      return statusMap[status];
+    }
+  },
   created() {
-    this.getData();
+    this.showMenuData(this.page);
   },
   methods: {
-    getData() {
-      this.$http.get("/api/systems").then(
+    reset() {
+      this.menuForm.parentId = "";
+      this.menuForm.paraName = "";
+      this.menuForm.keyValue = "";
+      this.menuForm.keyName = "";
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    addData() {
+      var auth = 0;
+      var authority = JSON.parse(localStorage.getItem("authority"));
+      for (var i = 0; i < authority.length; i++) {
+        if (authority[i] == "9") {
+          auth = 1;
+        }
+      }
+      if (!auth) {
+        this.reset();
+        this.dialogFormVisible = true;
+        this.title = "新增系统参数";
+      } else {
+        this.$alert("你没有新增菜单权限", {
+          confirmButtonText: "确定"
+        });
+      }
+    },
+    deleteUser(row) {
+      //单个删除
+      var auth = 0;
+      var authority = JSON.parse(localStorage.getItem("authority"));
+      if (authority) {
+        for (var i = 0; i < authority.length; i++) {
+          if (authority[i] == "11") {
+            auth = 1;
+          }
+        }
+      }
+      if (!auth) {
+        // var del_list = [];
+        // del_list.push(row.id);
+        console.log("this.del_list = "+ JSON.stringify(row))
+        this.$confirm("确定要删除该菜单？", "删除菜单", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "info"
+        })
+          .then(() => {
+            this.$http.delete("/api/systems?key_name=" + row.keyName).then(res => {
+              console.log("res.data.respCode  = "+res.data.respCode)
+              if (res.data.respCode == "1") {
+                this.$alert("删除成功", "成功", {
+                  confirmButtonText: "确定"
+                }).then(() => {
+                  this.listLoading = true;
+                  this.$http.get("/api/menus").then(res => {
+                    localStorage.setItem("menuList", JSON.stringify(res.data));
+                  });
+                  location.reload();
+                  this.showMenuData(this.page);
+                });
+              }
+            });
+          })
+          .catch(() => {});
+      } else {
+        this.$alert("你没有删除菜单权限", {
+          confirmButtonText: "确定"
+        });
+      }
+    },
+    deleteData() {
+      //批量删除
+      var auth = 0;
+      var authority = JSON.parse(localStorage.getItem("authority"));
+      if (authority) {
+        for (var i = 0; i < authority.length; i++) {
+          if (authority[i] == "11") {
+            auth = 1;
+          }
+        }
+      }
+      if (!auth) {
+        if (this.multipleSelection.length == 0) {
+          this.$alert("请至少选中一条数据", "批量删除", {
+            confirmButtonText: "确定"
+          });
+        } else {
+          var del_list = [];
+          for (var i in this.multipleSelection) {
+            del_list.push(this.multipleSelection[i].id);
+          }
+          this.$confirm("确定要删除所选择的菜单？", "删除菜单", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "info"
+          })
+            .then(() => {
+              this.$http.delete("/api/menus?ids=" + del_list).then(res => {
+                if (res.data.respCode == "1") {
+                  this.$alert("删除成功", "成功", {
+                    confirmButtonText: "确定"
+                  }).then(() => {
+                    this.listLoading = true;
+                    this.$http.get("/api/menus").then(res => {
+                      localStorage.setItem(
+                        "menuList",
+                        JSON.stringify(res.data)
+                      );
+                    });
+                    location.reload();
+                    this.showMenuData(this.page);
+                  });
+                }
+              });
+            })
+            .catch(() => {});
+        }
+      } else {
+        this.$alert("你没有删除菜单权限", {
+          confirmButtonText: "确定"
+        });
+      }
+    },
+    editData(row) {
+      var auth = 0;
+      var authority = JSON.parse(localStorage.getItem("authority"));
+      if (authority) {
+        for (var i = 0; i < authority.length; i++) {
+          if (authority[i] == "10") {
+            auth = 1;
+          }
+        }
+      }
+      if (!auth) {
+        this.menuForm = row;
+        //  parentId: "",
+        // paraName: "",
+        // keyValue: "",
+        // keyName: ""
+        // this.menuForm.parentId = this.menuForm.parentId.toString();
+        // this.menuForm.paraName = this.menuForm.paraName.toString();
+        // this.menuForm.keyValue = this.menuForm.keyValue.toString();
+        // this.menuForm.keyName = this.menuForm.keyName.toString();
+        this.title = "编辑菜单";
+        this.dialogFormVisible = true;
+      } else {
+        this.$alert("你没有编辑菜单权限", {
+          confirmButtonText: "确定"
+        });
+      }
+    },
+    showMenuData(page) {
+      //获取数据
+      this.list = [];
+      this.listLoading = true;
+      this.page = page;
+      this.$http.get("/api/systems?page=" + this.page).then(
         res => {
-          this.experienceForm.checkExperience = parseInt(
-            res.data.attend_exp
-          );
-          this.experienceForm.workExperience = parseInt(
-            res.data.activity_exp
-          );
-          this.experienceForm.distance = parseInt(res.data.distance);
-          this.experienceForm.attendances = res.data.attendence;
-          this.experienceForm.levels = res.data.levels;
+          // success callback
+          console.log(res);
+          this.listLoading = false;
+          this.totalNum = res.data.total;
+          if (this.totalNum != 0) {
+            this.list = res.data.records;
+          }
         },
         res => {
+          // this.$message.error('请求失败!  '+res);
+          this.listLoading = false;
           this.$router.push({
             path: "/" + res
           });
         }
       );
     },
-    removeLevelAndAttend(attendItem) {
-      var index1 = this.experienceForm.attendances.indexOf(attendItem);
-      if (index1 !== -1) {
-        this.experienceForm.attendances.splice(index1, 1);
-      }
-      if (index1 !== -1) {
-        this.experienceForm.levels.splice(index1, 1);
-      }
-    },
-    addLevelAndAttend() {
-      this.experienceForm.levels.push({
-        value: "",
-        key: Date.now() + 0
-      });
-      this.experienceForm.attendances.push({
-        ratio1: this.experienceForm.attendances[
-          this.experienceForm.attendances.length - 1
-        ].ratio2,
-        ratio2: "",
-        key: Date.now() + 1
+    getParentList() {
+      this.$http.get("/api/menus?parent=1").then(res => {
+        this.listLoading = false;
+        this.parentList = res.data;
+        this.parentList.push("无");
       });
     },
-    onSubmit(formName) {
+
+    addUser() {
+      this.reset();
+      this.dialogFormVisible = true;
+      this.title = "新增系统参数";
+    },
+    submitForm(formName) {
+      var data = {
+        // id: this.menuForm.id,
+        key_name: this.menuForm.keyName,
+        key_value: this.menuForm.keyValue,
+        para_name: this.menuForm.paraName,
+      };
+      var addData = {
+         key_name: this.menuForm.keyName,
+        key_value: this.menuForm.keyValue,
+        para_name: this.menuForm.paraName,
+      };
+      // if(thsi.menuForm.keyValue == "distance"){
+      //   alert("关键字重复")
+      // }
       this.$refs[formName].validate(valid => {
         if (valid) {
-          var num = [];
-          var k = [];
-
-          for (var i in this.experienceForm.levels) {
-            num.push(this.experienceForm.levels[i].value);
-          }
-
-          if (this.isContinuityNum(num)) {
-            //连续
-            //判断输入等级是否连续
-            var details = [];
-            for (var i in this.experienceForm.levels) {
-              details.push({
-                level: this.experienceForm.levels[i].value,
-                ratio: this.experienceForm.attendances[i].ratio2
-              });
-            }
-            var data = {
-              attend_exp: this.experienceForm.checkExperience,
-              activity_exp: this.experienceForm.workExperience,
-              distance: this.experienceForm.distance,
-              detail: details
-            };
-            this.$http.patch("/api/systems", data).then(
+          this.dialogFormVisible = false;
+          if (this.title == "新增系统参数") {
+            console.log("this.title is right//////////////////////ok")
+            // console.log("this.data2222222222222222222 = "+JSON.stringify(data))
+            this.showMenuData(data);
+            this.$http.post("/api/systems", null, {
+                params: addData
+              }).then(
               res => {
+                
+                console.log("res.data == "+JSON.stringify(res.data))
+                // // console.log("res.data.respCode = "+res.data.respCode)
                 if (res.data.respCode == "1") {
-                  this.$alert("成功", "成功", {
-                    confirmButtonText: "确定"
+                 this.$alert("系统参数新增成功", "成功", {
+                  confirmButtonText: "确定"
+                }).then(() => {
+                  this.listLoading = true;
+                  this.$http.get("/api/menus").then(res => {
+                    localStorage.setItem("menuList", JSON.stringify(res.data));
                   });
-                } else {
-                  this.$alert(res.data.respCode, "失败", {
-                    confirmButtonText: "确定"
-                  });
-                }
-              },
-              res => {
-                this.$router.push({
-                  path: "/" + res
+                  location.reload();
+                  this.showMenuData(this.page);
                 });
-              }
+                } else {
+                 this.$alert(res.data.respCode, "失败", {
+                  confirmButtonText: "确定"
+                });
+                this.showMenuData(this.page);
+                }
+                // this.$router.push({path: "/dataDictionary"})
+              },
+              // res => {
+              //   this.$router.push({
+              //     path: "/" + res
+              //   });
+              // }
             );
           } else {
-            this.$alert("设置的等级不连续", "失败", {
-              confirmButtonText: "确定"
+            this.$http.patch("/api/systems", null, {
+                params: addData
+              }).then(res => {
+              if (res.data.respCode == "1") {
+                this.$http.get("/api/menus").then(res => {
+                  localStorage.setItem("menuList", JSON.stringify(res.data));
+                });
+                this.$alert("系统参数修改成功", "成功", {
+                  confirmButtonText: "确定"
+                }).then(() => {
+                  this.listLoading = true;
+                  location.reload();
+                  this.showMenuData(this.page);
+                });
+              } else {
+                this.$alert("系统参数修改失败", "失败", {
+                  confirmButtonText: "确定"
+                });
+                this.showMenuData(this.page);
+              }
             });
           }
-        } else {
-          return false;
         }
       });
     },
+    
     resetForm(formName) {
-      // this.$refs[formName].resetFields();
-      this.experienceForm = this.experienceFormInit;
-      this.onSubmit(formName);
+      this.dialogFormVisible = false;
+      this.$refs[formName].resetFields();
+      this.reset();
+      this.showMenuData(this.page);
     },
-    //判断等级是否是连续的
-    isContinuityNum(num) {
-      let array = [];
-      if (num instanceof Array) {
-        array = [...num];
-      } else {
-        array = Array.from(num.toString()); //转换为数组
-      }
-
-      var i = array[0];
-      var isContinuation = true;
-      for (var e in array) {
-        if (array[e] != i) {
-          isContinuation = false;
-          break;
-        }
-        i++;
-      }
-      return isContinuation;
-    }
+    handleCurrentChange(val) {
+      this.page = val;
+      this.showMenuData(this.page);
+    },
   }
 };
 </script>
+<style scoped>
+.el-pagination {
+  text-align: center !important;
+  margin: 20px 0 !important;
+}
+.app-container {
+  background-color: #f0f2f5;
+  min-height: 100vh;
+  height: 100%;
+}
+.form-style {
+  background: #fff;
+  padding: 20px;
+}
+</style>
 <style>
-.el-input-group__append {
-  padding: 0 10px !important;
+.el-table__header {
+  width: auto !important;
+}
+.el-table__body {
+  width: auto !important;
 }
 </style>

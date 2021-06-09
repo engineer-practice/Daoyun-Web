@@ -514,6 +514,7 @@ export default {
         this.totalNum = res.data.total;
         if (this.totalNum != 0) {
           delete res.data[0];
+          console.log("res.data.records  = "+JSON.stringify(res.data.records))
           this.list = res.data.records;
           var data = res.data.records;
           function toTree(data) {
@@ -593,6 +594,7 @@ export default {
         if (valid) {
           this.dialogFormVisible = false;
           if (this.title == "新增菜单") {
+            console.log("this.addData ====="+JSON.stringify(addData))
             this.$http.post("/api/menus", addData).then(res => {
               if (res.data.respCode == "1") {
                 this.$alert("菜单新增成功", "成功", {

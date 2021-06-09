@@ -14,12 +14,12 @@
         >
           <el-row :gutter="40">
             <el-col :span="12">
-              <el-form-item label="中文标识" prop="name">
+              <el-form-item label="名称" prop="name">
                 <el-input v-model="dictionaryForm.name"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="英文标识" prop="code">
+              <el-form-item label="关键字" prop="code">
                 <el-input v-model="dictionaryForm.code" :disabled="isEdit"></el-input>
               </el-form-item>
             </el-col>
@@ -71,7 +71,21 @@
                   @click="deleteItem(scope.row)"
                   style="color:red;margin-left:20px"
                 ></i>
+                <button class="change-order-button" @click="onDataDictItemUp(scope.row)" >
+                  ↑
+                </button>
+                <button class="change-order-button" @click="onDataDictItemDown(scope.row)" >
+                  ↓
+                </button>
               </div>
+              <!-- <div style="display: flex; flex-direction: column; font-size: .1rem; margin-left: 10px">
+                <button class="change-order-button" @click="onDataDictItemUp(row,$index)" :disabled="$index === 0">
+                  ↑
+                </button>
+                <button class="change-order-button" @click="onDataDictItemDown(row,$index)" :disabled="$index === dataDictItemList.length - 1">
+                  ↓
+                </button>
+              </div> -->
             </template>
           </el-table-column>
         </el-table>
@@ -101,7 +115,7 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer" style="text-align: center;margin-bottom:10px">
-          <el-button type="primary" @click="submitForm('itemForm')" style="width:180px">提交</el-button>
+          <el-button type="primary" @click="submitForm('itemForm')" style="width:180px">保存</el-button>
           <el-button @click="resetForm('itemForm')" style="width:180px">取消</el-button>
         </div>
       </el-dialog>
@@ -125,8 +139,8 @@ export default {
         description: ""
       },
       dictionaryRules: {
-        code: [{ required: true, message: "请输入中文标识", trigger: "blur" }],
-        name: [{ required: true, message: "请输入英文标识", trigger: "blur" }]
+        code: [{ required: true, message: "名称为必填项", trigger: "blur" }],
+        name: [{ required: true, message: "关键字为必填项", trigger: "blur" }]
       },
       list: [],
       listLoading: false,
@@ -176,6 +190,7 @@ export default {
         }
       );
     },
+
     filterState(state) {
       if (state == "1") {
         return true;
@@ -245,6 +260,43 @@ export default {
       this.itemForm.isDefault = "0";
       this.dialogFormVisible = true;
       this.title = "新增数据项";
+    },
+    onDataDictItemUp(row,) {
+      console.log("this.list = "+JSON.stringify(this.list));
+      console.log("this.row = "+JSON.stringify(row));
+
+      let index = parseInt(row.code);
+      const tempListItem = this.list[(index+this.list.length)%this.list.length];
+      this.list[(index+this.list.length)%this.list.length] = this.list[(index-1+this.list.length)%this.list.length];
+      this.list[(index-1+this.list.length)%this.list.length] = tempListItem;
+       const tempcode = this.list[(index+this.list.length)%this.list.length].code;
+      this.list[(index+this.list.length)%this.list.length].code = this.list[(index-1+this.list.length)%this.list.length].code;
+      this.list[(index-1+this.list.length)%this.list.length].code = tempcode;
+      console.log("typeof = = "+typeof(index));
+      console.log("index = "+index);
+      console.log("this.list = //////////////"+JSON.stringify(this.list));
+      console.log("this.row = ///////////////////"+JSON.stringify(row));
+      // console.log("this.list[row.code] = "+JSON.stringify(this.list[row.code]));
+      // const tempDataDictItem = this.dataDictItemList[index]
+      // this.dataDictItemList[index] = this.dataDictItemList[index - 1]
+      // this.dataDictItemList[index - 1] = tempDataDictItem
+      // this.dataDictItemTableKey = Math.random()
+    },
+    onDataDictItemDown(row) {
+      console.log("this.list = "+JSON.stringify(this.list));
+      console.log("this.row = "+JSON.stringify(row));
+
+      let index = parseInt(row.code);
+      const tempListItem = this.list[(index+this.list.length)%this.list.length];
+      this.list[(index+this.list.length)%this.list.length] = this.list[(index+1+this.list.length)%this.list.length];
+      this.list[(index+1+this.list.length)%this.list.length] = tempListItem;
+       const tempcode = this.list[(index+this.list.length)%this.list.length].code;
+      this.list[(index+this.list.length)%this.list.length].code = this.list[(index+1+this.list.length)%this.list.length].code;
+      this.list[(index+1+this.list.length)%this.list.length].code = tempcode;
+      console.log("typeof = = "+typeof(index));
+      console.log("index = "+index);
+      console.log("this.list = //////////////"+JSON.stringify(this.list));
+      console.log("this.row = ///////////////////"+JSON.stringify(row));
     },
     submitForm(formName) {
       //提交数据项
@@ -333,6 +385,7 @@ export default {
             //修改数据字典
             var details = [];
             for (var i in this.list) {
+              console.log("this.list[i].id = "+this.list[i].id+"      this.list[i].code = "+this.list[i].code)
               details.push({
                 id: this.list[i].id,
                 value: this.list[i].value,
@@ -363,6 +416,7 @@ export default {
                     confirmButtonText: "确定"
                   });
                 }
+                this.$router.push({path: "/dataDictionary"})
               },
               res => {
                 this.$router.push({
@@ -404,5 +458,19 @@ export default {
 .add_btn {
   width: 100%;
   margin-top: 20px;
+}
+.change-order-button {
+  background-color: #319795;
+  color: white;
+  font-weight: 900;
+  border: 0;
+  margin: 1px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.change-order-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 </style>
