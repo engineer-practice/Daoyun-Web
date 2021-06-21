@@ -20,12 +20,36 @@ module.exports = {
                 pathRewrite: {
                     '^/api': '/'     //这里理解成用‘/api’代替target里面的地址，后面组件中我们掉接口时直接用api代替 比如我要调用'http://10.1.5.11:8080/xxx/duty?time=2017-07-07 14:57:22'，直接写‘/api/xxx/duty?time=2017-07-07 14:57:22’即可
                 }
-            }
+            },
+            // '/api': { //代理标识
+            //     target: 'http://localhost:8081',
+            //     changeOrigin: true, // 允许跨域
+            //     secure: false,
+            //     pathRewrite: {
+            //         '^.api': '/'
+            //     }
+            // },
+            '/apis': { //代理标识
+                target: 'http://localhost:8081',
+                changeOrigin: true, // 允许跨域
+                secure: false,
+                pathRewrite: {
+                    '^.apis': '/'
+                }
+            },
+            '/apiss': { //代理标识
+                target: 'http://localhost:8081',
+                changeOrigin: true, // 允许跨域
+                secure: false,
+                pathRewrite: {
+                    '^.apiss': '/'
+                }
+            },
         },
 
         // Various Dev Server settings
         // host: 'localhost', // can be overwritten by process.env.HOST
-        host: 'localhost',
+        host: '0.0.0.0',
         port: 8081, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
         autoOpenBrowser: true,
         errorOverlay: true,
@@ -69,7 +93,7 @@ module.exports = {
         assetsSubDirectory: 'static',
         proxyTable: {
             '/api': {
-                target: 'http://localhost:8080', //设置你调用的接口域名和端口号
+                target: 'http://120.77.220.113:8080',
                 changeOrigin: true,
                    //跨域
                 pathRewrite: {
