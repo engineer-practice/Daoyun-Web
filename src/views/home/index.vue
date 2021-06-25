@@ -58,7 +58,7 @@ export default {
   created() {
     this.showAuthorityList();
     // this.getMenuList();
-    // console.log(localStorage.getItem("menuList"))
+    // console.log("menulist = "+localStorage.getItem("menuList"))
     // if(localStorage.getItem("isUpdate")==null||localStorage.getItem("isUpdate")==undefined){
     //   localStorage.setItem("isUpdate",1);
     //   this.reload();
@@ -68,7 +68,7 @@ export default {
   methods: {
     showAuthorityList() {
       var roleId = parseInt(localStorage.getItem("roleId"));
-      localStorage.setItem("roleId", 1);
+      // localStorage.setItem("roleId", 1);
       console.log("roleId = "+JSON.stringify(roleId))
       this.$http.get("/api/rolePower?role_id=" + roleId).then(res => {
         const value = JSON.stringify(res.data);

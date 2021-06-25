@@ -77,6 +77,7 @@ export default {
      isShowMenu(item){
       var roles=localStorage.getItem("roles");
       if(item.roles==roles||item.roles=="common"||roles=="superAdmin"){
+        console.log("currentRoles = "+roles);
         return true;
       }else{
         return false;

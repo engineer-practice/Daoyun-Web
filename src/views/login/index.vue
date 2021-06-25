@@ -265,7 +265,7 @@ export default {
       //       localStorage.setItem("validateCode", res.data);
       // });
       console.log("准备调用")
-      get('/api/sendCode',data).then(res =>{console.log("res ="+JSON.stringify(res))})
+      // get('/api/sendCode',data).then(res =>{console.log("res ="+JSON.stringify(res))})
       console.log("准备结束")
 
       /////////////////////////////////////////////////////////////////////////
@@ -284,19 +284,24 @@ export default {
                 params: data
               }).then(
               res => {
-                console.log("res.data = "+JSON.stringify(res.data));
                 if (res.data.result == true) {
                   this.loading = false;
                   //登录成功
-                  if (res.data.role != "3") {
+                  if (res.data.dataList[0].role != "3") {
+                    console.log("res.data = "+JSON.stringify(res.data));
                     localStorage.setItem("roleId", res.data.role);
-                    if (res.data.role == "0") {
+                    console.log("res.data.role = = "+res.data.role)
+                    console.log("res.data.dataList = "+JSON.stringify(res.data.dataList[0]))
+                    if (res.data.dataList[0].role == "0") {
                       //登录角色
                       localStorage.setItem("roles", "teacher");
-                    } else if (res.data.role == "1") {
+                      localStorage.setItem("roleId", 0);
+                    } else if (res.data.dataList[0].role == "1") {
                       localStorage.setItem("roles", "admin");
-                    } else if (res.data.role == "2") {
+                      localStorage.setItem("roleId", 1);
+                    } else if (res.data.dataList[0].role == "2") {
                       localStorage.setItem("roles", "superAdmin");
+                      localStorage.setItem("roleId", 2);
                     }
 
                     var date = new Date();
@@ -361,14 +366,14 @@ export default {
                   this.loading = false;
                   if (res.data.result == true) {
                     //登录成功914392
-                    if (res.data.role != "3") {
+                    if (res.data.dataList[0].role != "3") {
                       localStorage.setItem("roleId", res.data.role);
-                      if (res.data.role == "0") {
+                      if (res.data.dataList[0].role == "0") {
                         //登录角色
                         localStorage.setItem("roles", "teacher");
-                      } else if (res.data.role == "1") {
+                      } else if (res.data.dataList[0].role == "1") {
                         localStorage.setItem("roles", "admin");
-                      } else if (res.data.role == "2") {
+                      } else if (res.data.dataList[0].role == "2") {
                         localStorage.setItem("roles", "superAdmin");
                       }
                       var date = new Date();

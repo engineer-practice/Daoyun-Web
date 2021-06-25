@@ -134,8 +134,8 @@ function routerGo() {
     {
         icon: "el-icon-set-up",
         name: "角色管理",
-        roles: "common",
-        // roles: "superAdmin",
+        // roles: "common",
+        roles: "superAdmin",
         url: "/roleManage",
         children: [{
             name: "权限分配",
@@ -148,15 +148,15 @@ function routerGo() {
     {
         icon: "el-icon-user-solid",
         name: "用户管理",
-        // roles: "admin",
-        roles: "common",
+        roles: "admin",
+        // roles: "common",
         url: "/userManage"
     },
     {
         icon: "el-icon-reading",
         name: "数据字典管理",
-        // roles: "superAdmin",
-        roles: "common",
+        roles: "superAdmin",
+        // roles: "common",
         url: "/dataDictionary",
         children: [{
             name: "数据字典管理",
@@ -174,16 +174,16 @@ function routerGo() {
     {
         icon: "el-icon-folder-opened",
         name: "系统参数管理",
-        // roles: "superAdmin",
-        roles: "common",
+        roles: "superAdmin",
+        // roles: "common",
         // url: "/404"
         url: "/systemManage",
     },
     {
         icon: "el-icon-s-flag",
         name: "学校管理",
-        // roles: "common",
-        roles: "admin",
+        roles: "common",
+        // roles: "admin",
         // url: "/403"
         url: "/schoolManage",
     },

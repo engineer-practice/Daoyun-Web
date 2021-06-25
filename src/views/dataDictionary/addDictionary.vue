@@ -311,6 +311,15 @@ export default {
             });
             console.log(this.list);
           } else {
+            console.log("this.list = "+JSON.stringify(this.list));
+            console.log("this.row = "+JSON.stringify(this.row));
+            console.log("this.itemForm.isDefault"+this.itemForm.isDefault)
+           
+            if(this.itemForm.isDefault){
+               for (var i in this.list) {
+                  this.list[i].isDefault = 0;
+               }
+            }
             for (var i in this.list) {
               if (
                 (this.list[i].index == this.row.index &&
@@ -360,6 +369,7 @@ export default {
               description: this.dictionaryForm.description,
               detail: details
             };
+            console.log("data ===== "+JSON.stringify(data))
             this.$http.post("/api/dictionaries", data).then(
               res => {
                 console.log("res.data.respCode = "+res.data.respCode)
@@ -404,8 +414,21 @@ export default {
               description: this.dictionaryForm.description,
               detail: details
             };
+            // console.log("data = "+JSON.stringify(data))
+            // // console.log("datadetailIdtypeof = "+typeof(data.detail[0].id));
+            // var max =-99999;
+            // for(var i in data.detail){
+            //   if(max<data.detail[i].id){
+            //     max =data.detail[i].id;
+            //   }
+            // }
+            // for(var i in data.detail){
+            //   data.detail[i].id = max-data.detail[i].id;
+            // }
+            console.log("data = "+JSON.stringify(data))
             this.$http.patch("/api/dictionaries", data).then(
               res => {
+                console.log("res.data = "+JSON.stringify(res.data));
                 // success callback
                 if (res.data.respCode == "1") {
                   this.$alert("数据字典修改成功", "成功", {
