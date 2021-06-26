@@ -1,4 +1,13 @@
 <template>
+  
+
+<div class ="all">
+  <div>
+    <div class = "logo">
+      
+    </div>
+    <h1 class ="headcolor">到云</h1>
+  </div>
   <div class="login-wrap">
     <div class="login-form">
       <div class="ms-title">到云后台管理系统</div>
@@ -9,11 +18,13 @@
           </el-tabs>
         </div> -->
       <div>
+        
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="密码登录" name="1"></el-tab-pane>
           <el-tab-pane label="手机号登录" name="2"></el-tab-pane>
         </el-tabs>
       </div>
+
       <el-form
         v-show="activeName == '1'"
         autocomplete="on"
@@ -120,6 +131,13 @@
       </el-form>
     </div>
   </div>
+  <div>
+    <h1 class ="tailcolor">为了获得最佳浏览效果，建议在分辨率大于或等于 1024*768 的屏幕下浏览网站<br>
+2020 - 2021 福州大学数学与计算机学院工程训练2_209<br>
+地址：福建省福州市闽侯县上街镇福州大学数计学院2号楼     联系电话：13774763228
+</h1>
+  </div>
+</div>
 </template>
 
 <script>
@@ -440,10 +458,50 @@ export default {
   left: 0;
   right: 0;
   width: 100%;
-  height: 100%;
+  height: 80%;
 
   background-image: url(../../assets/img/login-bg.jpg);
   background-size: 100%;
+}
+.all {
+  position: relative;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  /* background-image: url(../../assets/img/login-bg.jpg); */
+  background-size: 100%;
+}
+.logo {
+  position: absolute;
+  left: 600px;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  margin:-5px 100px 150px 0px;
+  background-image: url(../../assets/img/logo.png);
+  background-size: 100%;
+  /* border-bottom: 1px solid #ddd; */
+  /* margin: 10px auto; */
+}
+.headcolor {
+  width: 100%;
+  line-height: 30px;
+  text-align: center;
+  font-size: 30px;
+  color: rgb(114, 116, 116);
+  /* border-bottom: 1px solid #ddd; */
+  /* margin: 10px auto; */
+}
+.tailcolor {
+  width: 100%;
+  line-height: 20px;
+  text-align: center;
+  font-size: 1px;
+  color: rgb(114, 116, 116);
+  /* border-bottom: 1px solid #ddd; */
+  /* margin: 10px auto; */
 }
 .ms-title {
   width: 100%;
@@ -499,10 +557,10 @@ export default {
   left: 0;
   right: 0;
   width: 400px;
-  padding: 35px 35px 15px 35px;
-  margin: 120px auto;
+  padding:35px 35px 15px 35px;
+  margin: 120px 370px;
   /* background-color: #f8f8f9; */
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.7);
   overflow: hidden;
 }
 </style>

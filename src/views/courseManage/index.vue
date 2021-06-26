@@ -291,6 +291,7 @@ export default {
       this.page = page;
       this.$http.get("/api/courseManage?" + "page=" + page).then(
         res => {
+          console.log("res.data from get = "+ JSON.stringify(res.data));
           this.list = res.data.records;
           this.listLoading = false;
           this.totalNum = res.data.total;
