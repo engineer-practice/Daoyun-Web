@@ -296,7 +296,7 @@ export default {
               account: this.loginForm.username,
               password: this.loginForm.password
             };
-            localStorage.setItem("roleEmail", data.email);
+            localStorage.setItem("roleEmail", data.account);
             // this.$http.post("/api/loginByPassword", data).then(
               this.$http.post("/api/loginByPassword", null, {
                 params: data
@@ -325,9 +325,11 @@ export default {
                     var date = new Date();
                     localStorage.setItem("loginTime", date.getTime()); //登录时间
                     localStorage.setItem("Authorization", res.data.token);
-                    localStorage.setItem("account", res.data.email);
+                    localStorage.setItem("account", res.data.account);
                     localStorage.setItem("isLogin", true);
+                    // console.log("this.localstorage = "+JSON.stringify(localStorage))
                     this.$http.get("/api/menus").then(res => {
+                      // console.log("菜单列表data = "+JSON.stringify(res.data))
                       localStorage.setItem(
                         "menuList",
                         JSON.stringify(res.data)

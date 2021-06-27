@@ -141,7 +141,7 @@ export default {
           } else {
             this.loading = true;
             var data = {
-              email: this.ruleForm.email,
+              telephone: this.ruleForm.email,
               newpassword: this.ruleForm.passChange,
             };
             this.$http.post("/api/user/forgetPassword", data).then(res => {

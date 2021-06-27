@@ -59,9 +59,9 @@
             <span>{{scope.row.tel}}</span>
           </template>
         </el-table-column>-->
-        <el-table-column label="邮箱" min-width="100" align="center">
+        <el-table-column label="手机号码" min-width="100" align="center">
           <template slot-scope="scope">
-            <span>{{scope.row.email}}</span>
+            <span>{{scope.row.telephone}}</span>
           </template>
         </el-table-column>
         <el-table-column label="角色" min-width="100" align="center">
@@ -70,6 +70,11 @@
             <span v-if="scope.row.roleId=='1'">管理员</span>
             <span v-if="scope.row.roleId=='2'">超级管理员</span>
             <!-- <span>{{scope.row.role}}</span> -->
+          </template>
+        </el-table-column>
+       <el-table-column label="所属机构" min-width="80" align="center">
+          <template slot-scope="scope">
+            <span>{{scope.row.schoolName}}</span>
           </template>
         </el-table-column>
         <el-table-column label="状态" min-width="50" align="center">
@@ -116,11 +121,14 @@
         label-width="100px"
         class="demo-ruleForm"
       >
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="ruleForm.email" :disabled="title=='修改用户信息'" placeholder="请输入邮箱"></el-input>
-        </el-form-item>
+        <el-form-item label="手机号码" prop="telephone">
+          <el-input v-model="ruleForm.telephone" :disabled="title=='修改用户信息'" placeholder="请输入手机号码"></el-input>
+        </el-form-item>     
         <el-form-item label="用户名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入用户名称"></el-input>
+        </el-form-item>
+         <el-form-item label="所属机构" prop="schoolName">
+          <el-input v-model="ruleForm.schoolName" placeholder="请输入用户所属机构"></el-input>
         </el-form-item>
         <el-form-item label="性别">
           <el-radio v-model="ruleForm.sex" label="1">男</el-radio>
@@ -184,18 +192,18 @@ export default {
         name: "",
         sex: "0",
         roleId: "0",
-        email: ""
+        telephone: ""
       },
       roleAu: false,
       rules: {
         name: [{ required: true, message: "请输入用户名称", trigger: "blur" }],
         roleId: [{ required: true, message: "请选择角色", trigger: "change" }],
         // tel: [{ required: true, validator: checkPhone, trigger: "blur" }],
-        email: [
-          { required: true, message: "请输入邮箱", trigger: "blur" },
+        telephone: [
+          { required: true, message: "请输入手机号码", trigger: "blur" },
           {
-            type: "email",
-            message: "请输入正确的邮箱地址",
+            // type: "email",
+            message: "请输入正确的手机号码",
             trigger: ["blur", "change"]
           }
         ]
@@ -244,7 +252,7 @@ export default {
     },
     changeState(row) {
       var data = {
-        email: row.email
+        telephone: row.telephone
       };
       var auth = 0;
       //恢复权限
@@ -266,10 +274,13 @@ export default {
         }
       }
       if ((!auth && row.state == 1) || (!auth1 && row.state == 0)) {
-        this.$http.patch("/api/user", data).then(
+        console.log("patch/userdata = "+JSON.stringify(data));
+        this.$http.patch("/api/user", null, {
+                params: data
+              }).then(
           res => {
             // success callback
-            if (res.data.respCode !== "1") {
+            if (res.data.respCode == "1") {
               this.$alert("状态修改成功", "成功", {
                 confirmButtonText: "确定"
               });
@@ -313,9 +324,10 @@ export default {
           }
         }
       }
-      if (auth) {
+      if (!auth) {
+        console.log("currow.telephone = "+row.telephone)
         this.$http
-          .put("/api/user/resetPassword?email=" + row.email)
+          .put("/api/user/resetPassword?email=" + row.telephone)
           .then(res => {
             if (res.data.respCode == "1") {
               this.$alert("密码重置成功", "成功", {
@@ -354,9 +366,9 @@ export default {
             confirmButtonText: "确定"
           });
         } else {
-          var emails = [];
+          var telephones = [];
           for (var i in this.multipleSelection) {
-            emails.push(this.multipleSelection[i].email);
+            telephones.push(this.multipleSelection[i].telephone);
           }
           this.$confirm("确定要删除选择的用户？", "删除用户", {
             confirmButtonText: "确定",
@@ -364,7 +376,11 @@ export default {
             type: "info"
           })
             .then(() => {
-              var data = emails;
+              //  for (var i in this.multipleSelection) {
+              //     console.log("this.multipleSelection[i] = "+JSON.stringify(this.multipleSelection[i]))
+              //  }
+              var data = telephones;
+              console.log("deleteData = "+JSON.stringify(data))
               this.$http.delete("/api/user?del_list=" + data).then(
                 res => {
                   if (res.data.respCode == "1") {
@@ -479,6 +495,7 @@ export default {
               .then(
           res => {  
              console.log("succeed succeed succeed succeed succeed")
+             console.log("Uersres.data = "+JSON.stringify(res.data))
              this.list = res.data.dataList;
             this.listLoading = false;
              this.totalNum = res.data.total;
@@ -499,7 +516,7 @@ export default {
       this.ruleForm.name = "";
       this.ruleForm.sex = "1";
       this.ruleForm.roleId = "0";
-      this.ruleForm.email = "";
+      this.ruleForm.telephone = "";
     },
     addData() {
       var auth = 0;
@@ -527,7 +544,7 @@ export default {
           this.dialogFormVisible = false;
           if (this.title == "新增用户") {
             var data = {
-              email: this.ruleForm.email,
+              telephone: this.ruleForm.telephone,
               name: this.ruleForm.name,
               roleId: this.ruleForm.roleId,
               sex: this.ruleForm.sex,
@@ -560,7 +577,7 @@ export default {
               name: this.ruleForm.name,
               sex: this.ruleForm.sex,
               roleId: this.ruleForm.roleId,
-              email: this.ruleForm.email
+              telephone: this.ruleForm.telephone
             };
             this.$http.put("/api/user", data).then(
               res => {

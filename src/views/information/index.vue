@@ -281,11 +281,13 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           var data = {
-            email: localStorage.getItem("account"),
+            telephone: localStorage.getItem("roleEmail"),
             newpassword1: this.ruleForm2.pass,
             newpassword2: this.ruleForm2.checkPass,
             oldpassword: this.ruleForm2.oldPass
           };
+          console.log("this.localStorage = "+JSON.stringify(localStorage))
+          console.log("修改密码data = "+JSON.stringify(data))
           this.$http.post("/api/user/updatePassword", data).then(
             res => {
               if (res.data.respCode == "1") {

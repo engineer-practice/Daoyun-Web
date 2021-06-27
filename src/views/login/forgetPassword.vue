@@ -91,6 +91,28 @@ export default {
   },
   methods: {
     changeConfirm() {
+      var data = {
+              telephone: this.ruleForm.zhanghao,
+              newpassword: this.ruleForm.newPsd,
+            };
+            console.log("this.ruleForm = "+JSON.stringify(this.ruleForm))
+            console.log("忘记密码data = "+JSON.stringify(data))
+            this.$http.post("/api/user/forgetPassword",  null, {
+                params: data
+              }).then(res => {
+              if (res.data.respCode == "1") {
+                this.$alert("密码修改成功，跳转到登录页重新登录", "成功", {
+                  confirmButtonText: "确定"
+                });
+                 this.loading = false;
+                this.$router.push("/login");
+              } else {
+                this.$alert(res.data.respCode, "失败", {
+                  confirmButtonText: "确定"
+                });
+              }
+             
+            });
       this.$router.push({ path: "/login", query: {} });
     },
     getPhoneMessage() {//获取手机验证码

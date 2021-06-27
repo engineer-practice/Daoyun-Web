@@ -75,6 +75,7 @@ export default {
       return false
     },
      isShowMenu(item){
+      //  console.log("item ==============="+JSON.stringify(item))
       var roles=localStorage.getItem("roles");
       if(item.roles==roles||item.roles=="common"||roles=="superAdmin"){
         console.log("currentRoles = "+roles);

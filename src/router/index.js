@@ -148,14 +148,14 @@ function routerGo() {
     {
         icon: "el-icon-user-solid",
         name: "用户管理",
-        roles: "admin",
+        roles: "superAdmin",
         // roles: "common",
         url: "/userManage"
     },
     {
         icon: "el-icon-reading",
         name: "数据字典管理",
-        roles: "superAdmin",
+        roles: "admin",
         // roles: "common",
         url: "/dataDictionary",
         children: [{
@@ -167,15 +167,15 @@ function routerGo() {
         icon: "el-icon-menu",
         name: "菜单管理",
         // name: "系统参数管理",
-        // roles: "Admin",
+        roles: "admin",
         roles: "common",
         url: "/menuManage"
     },
     {
         icon: "el-icon-folder-opened",
         name: "系统参数管理",
-        roles: "superAdmin",
-        // roles: "common",
+        // roles: "admin",
+        roles: "common",
         // url: "/404"
         url: "/systemManage",
     },
