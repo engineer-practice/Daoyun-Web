@@ -121,10 +121,10 @@
       </el-dialog>
     </div>
     <div
-      slot="footer"
+      slot="footer" 
       style="text-align: right;color: #5d5b5b;font-size:14px;margin:10px;background: #fff;"
     >
-      <el-button type="primary" style="width:180px" size="small" @click="submit('ruleForm')">提交</el-button>
+      <el-button type="primary" class = "submit" style="width:180px" size="small" @click="submit('ruleForm')">提交</el-button>
     </div>
   </div>
 </template>
@@ -481,6 +481,14 @@ export default {
 .add_btn {
   width: 100%;
   margin-top: 20px;
+}
+.submit {
+ position: absolute;
+  left: 85%;
+  top: 87%;
+  width: 400px;
+  margin: 0px 0px 0px 0px;
+  border-radius: 5px;
 }
 .change-order-button {
   background-color: #319795;

@@ -304,10 +304,10 @@ export default {
         // this.menuForm.paraName = this.menuForm.paraName.toString();
         // this.menuForm.keyValue = this.menuForm.keyValue.toString();
         // this.menuForm.keyName = this.menuForm.keyName.toString();
-        this.title = "编辑菜单";
+        this.title = "编辑系统参数";
         this.dialogFormVisible = true;
       } else {
-        this.$alert("你没有编辑菜单权限", {
+        this.$alert("你没有编辑系统参数权限", {
           confirmButtonText: "确定"
         });
       }
@@ -404,10 +404,12 @@ export default {
               // }
             );
           } else {
+            console.log("修改系统的data = "+JSON.stringify(addData))
             this.$http.patch("/api/systems", null, {
                 params: addData
               }).then(res => {
               if (res.data.respCode == "1") {
+                console.log("修改系统参数返回data = "+JSON.stringify(res.data))
                 this.$http.get("/api/menus").then(res => {
                   localStorage.setItem("menuList", JSON.stringify(res.data));
                 });
