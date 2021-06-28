@@ -240,7 +240,7 @@ $light_gray: #4a4949;
   height: 100%;
   width: 100%;
   //   background-color: $bg;
-  background-image: url("../../assets/bg.jpg");
+  background-image: url("../../assets/img/login-bg.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   .login-form {
