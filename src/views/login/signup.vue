@@ -4,7 +4,7 @@
     <div class = "logo">
       
     </div>
-    <h1 class ="headcolor">到云</h1>
+    <h1 class ="headcolor">帮助</h1>
   </div>
   <div class="login-container">
     <!-- <div class="login-form"> -->
@@ -496,11 +496,11 @@ export default {
 }
 .logo {
   position: absolute;
-  left: 600px;
+  left: 330px;
   right: 0;
-  width: 40px;
-  height: 40px;
-  margin:-5px 100px 150px 0px;
+  width: 200px;
+  height: 200px;
+  margin:-10px 100px 100px 0px;
   background-image: url(../../assets/img/logo.png);
   background-size: 100%;
   /* border-bottom: 1px solid #ddd; */
@@ -508,32 +508,47 @@ export default {
 }
 .headcolor {
   width: 100%;
-  line-height: 30px;
-  text-align: center;
-  font-size: 30px;
+  line-height: 50px;
+  /* text-align: right; */
+  /* left :50%; */
+  padding: 0px 0px 0px 1200px;
+  font-size: 10px;
   color: rgb(114, 116, 116);
   /* border-bottom: 1px solid #ddd; */
   /* margin: 10px auto; */
 }
 .tailcolor {
-  position: absolute;
+  /* position: absolute;
   width: 100%;
   line-height: 20px;
   text-align: center;
   font-size: 1px;
   color: rgb(114, 116, 116);
-  margin:635px 100px 150px 0px;
+  margin:635px 100px 150px 0px; */
+  width: 100%;
+  line-height: 20px;
+  text-align: center;
+  font-size: 1px;
+  color: rgb(114, 116, 116);
+  /* border-bottom: 1px solid #ddd; */
+  /* margin: 10px auto; */
   /* border-bottom: 1px solid #ddd; */
   /* margin: 10px auto; */
 }
   .login-container {
-  position: fixed;
+  /* position: fixed;
   height: 80%;
   width: 100%;
-  /* background-image: url("../../assets/bg.jpg"); */
-  /* background-size: cover; */
   background-repeat: no-repeat;
   background-image: url(../../assets/img/login-bg.jpg);
-    background-size: 100%;
+    background-size: 100%; */
+    position: relative;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 80%;
+
+  background-image: url(../../assets/img/login-bg.jpg);
+  background-size: 100%;
 }
 </style>
